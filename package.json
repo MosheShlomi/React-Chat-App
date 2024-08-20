@@ -13,6 +13,7 @@
     "emoji-picker-react": "^4.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-toastify": "^10.0.5",
     "sass": "^1.77.8"
   },
   "devDependencies": {

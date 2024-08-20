@@ -14,11 +14,13 @@ body {
   height: 100%;
   color: white;
   margin-top: 5vh;
+  overflow-x: hidden;
 }
 
 .container {
   width: 80vw;
   height: 90vh;
+  min-height: 90vh;
   background-color: rgba(18, 18, 59, 0.322);
   /* very nice usage */
   backdrop-filter: blur(19px) saturate(180%);
@@ -35,5 +37,13 @@ body {
   .container {
     flex-direction: column;
     height: 100%;
+
+    .login {
+      flex-direction: column;
+
+      .item {
+        margin: 20vh 0;
+      }
+    }
   }
 }
