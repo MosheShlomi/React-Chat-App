@@ -57,6 +57,11 @@
                 font-weight: 500;
                 background-color: blue;
                 font-size: 16px;
+
+                &:disabled{
+                    cursor: not-allowed;
+                    background-color: rgb(5, 5, 82);
+                }
             }
 
         }
