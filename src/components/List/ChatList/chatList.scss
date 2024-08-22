@@ -61,8 +61,10 @@
 
         .texts {
             display: flex;
+            flex: 1;
             flex-direction: column;
             gap: 10px;
+            position: relative;
 
             span {
                 font-weight: 500;
@@ -71,6 +73,17 @@
             p {
                 font-size: 14px;
                 font-weight: 300;
+            }
+
+            .isSeen {
+                width: 10px;
+                height: 10px;
+                background-color: #5183fe;
+                border-radius: 50%;
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-50%);
             }
         }
     }
