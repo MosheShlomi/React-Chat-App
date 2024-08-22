@@ -2,7 +2,7 @@
 
 ## 📜 Overview
 
-**Chat Starter** is a simple, yet powerful chat application built with React and Firebase. It allows users to send messages in real-time, use emojis, and receive notifications. This project leverages modern technologies like Vite for fast development, Firebase for backend services, and Zustand for state management.
+**Chat App** is a simple, yet powerful chat application built with React and Firebase. It allows users to send messages in real-time, use emojis, and receive notifications. This project leverages modern technologies like Vite for fast development, Firebase for backend services, and Zustand for state management.
 
 ## 🚀 Features
 
