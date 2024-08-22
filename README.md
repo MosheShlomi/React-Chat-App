@@ -1,4 +1,4 @@
-# Chat Starter
+# React Chat App
 
 ## 📜 Overview
 
