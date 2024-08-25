@@ -1,3 +1,5 @@
+@import './scss/utils/variables';
+
 * {
   margin: 0;
   padding: 0;
@@ -21,11 +23,11 @@ body {
   width: 80vw;
   height: 90vh;
   min-height: 90vh;
-  background-color: rgba(18, 18, 59, 0.322);
+  background-color: $container-bg;
   /* very nice usage */
   backdrop-filter: blur(19px) saturate(180%);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.135);
+  border: 1px solid $container-border-color;
   display: flex;
 }
 
@@ -37,7 +39,7 @@ body {
   padding: 50px;
   font-size: 36px;
   border-radius: 10px;
-  background-color: rgb(20, 20, 40);
+  background-color: $popup-bg;
 }
 
 @media screen and (max-width: 1400px) {
@@ -57,4 +59,20 @@ body {
       }
     }
   }
+}
+
+//Scrollbar styling
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(212, 212, 212, 0.3);
+  background-color: #000000;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  background-color: rgb(39, 39, 39);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(89, 89, 89);
+  border-radius: 5px;
 }
