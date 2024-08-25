@@ -1,8 +1,10 @@
+@import "../../../../scss/utils/variables";
+
 .addUser {
     width: max-content;
     height: max-content;
     padding: 30px;
-    background-color: rgba(36, 36, 56, 0.824);
+    background-color: $popup-bg;
     border-radius: 10px;
     position: absolute;
     top: 0;
@@ -29,7 +31,7 @@
             cursor: pointer;
             color: white;
             border: none;
-            background-color: rgb(3, 3, 176);
+            background-color: $action-btn-bg;
         }
     }
 
@@ -58,7 +60,7 @@
             cursor: pointer;
             color: white;
             border: none;
-            background-color: rgb(1, 1, 142);
+            background-color: $action-btn-bg;
         }
     }
 }

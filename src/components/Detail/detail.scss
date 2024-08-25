@@ -1,3 +1,5 @@
+@import "../../scss/utils/variables";
+
 .detail {
     flex: 1;
     overflow: auto;
@@ -8,7 +10,7 @@
         flex-direction: column;
         align-items: center;
         gap: 15px;
-        border: 1px solid #dddddd35;
+        border: 1px solid $section-divider;
 
         img {
             width: 100px;
@@ -35,7 +37,7 @@
                 img {
                     width: 30px;
                     height: 30px;
-                    background-color: blue;
+                    background-color: $icon-bg;
                     padding: 10px;
                     cursor: pointer;
                     border-radius: 50%;
@@ -55,7 +57,7 @@
                     padding: 10px;
                     border-radius: 50%;
                     cursor: pointer;
-                    background-color: blue;
+                    background-color: $icon-bg;
                 }
 
 
@@ -92,19 +94,19 @@
 
         button {
             padding: 15px;
-            background-color: red;
+            background-color: $warning-btn-bg;
             color: white;
             cursor: pointer;
             border: none;
             border-radius: 5px;
             font-size: 16px;
 
-            &:hover{
-                background-color: rgba(168, 2, 2, 0.758);
+            &:hover {
+                background-color: $warning-btn-bg-hover;
             }
 
-            &.logout{
-                background-color: rgb(2, 139, 116);
+            &.logout {
+                background-color: $action-btn-bg;
             }
         }
     }
