@@ -35,7 +35,7 @@ const Login = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast.success("You signed successfully!");
+      toast.success("You signed in successfully!");
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -54,14 +54,14 @@ const Login = () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
 
-      const imgUrl = await upload(avatar.file);
+      const imgUrl = avatar.file ? await upload(avatar.file) : null;
 
       await setDoc(doc(db, "users", res.user.uid), {
         username,
         email,
-        avatar: imgUrl,
         id: res.user.uid,
         blocked: [],
+        ...(avatar.file && { avatar: imgUrl }),
       });
 
       await setDoc(doc(db, "userchats", res.user.uid), {
@@ -70,7 +70,7 @@ const Login = () => {
 
       toast.success("You registered successfully! Now login.");
     } catch (err) {
-      console.log(err);
+      console.log("Registration error:", err);
       toast.error(err.message);
     } finally {
       setLoading(false);
