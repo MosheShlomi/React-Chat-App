@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
-import { useChatStore } from "../../lib/chatStore";
 import "./chat.scss";
+import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
 
-//rafce
 const Chat = () => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
@@ -23,7 +22,7 @@ const Chat = () => {
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, []);
+    }, [chat]);
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, "chats", chatId), res => {
@@ -34,8 +33,6 @@ const Chat = () => {
             unSub();
         };
     }, [chatId]);
-
-    console.log(chat);
 
     const handleEmojiClick = e => {
         setText(prev => prev + e.emoji);
@@ -81,7 +78,6 @@ const Chat = () => {
 
                     const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
 
-                    // console.log(userChatsData);
                     userChatsData.chats[chatIndex].lastMessage = text;
                     userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
                     userChatsData.chats[chatIndex].updatedAt = Date.now();
@@ -103,6 +99,13 @@ const Chat = () => {
         setText("");
     };
 
+    const handleEnter = e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            handleSend();
+        }
+    };
+
     return (
         <div className="chat">
             <div className="top">
@@ -110,7 +113,7 @@ const Chat = () => {
                     <img src={user?.avatar || "./avatar.png"} alt="" />
                     <div className="texts">
                         <span>{user?.username}</span>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, nam.</p>
+                        <p>{user?.status || "Here should be status phrase of the user!"}</p>
                     </div>
                 </div>
 
@@ -157,6 +160,7 @@ const Chat = () => {
                     }
                     value={text}
                     onChange={e => setText(e.target.value)}
+                    onKeyDown={handleEnter}
                     disabled={isCurrentUserBlocked || isReceiverBlocked}
                 />
                 <div className="emoji">
