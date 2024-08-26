@@ -106,7 +106,6 @@ const Chat = () => {
         }
     };
 
-    console.log(user);
     return (
         <div className="chat">
             <div className="top">
