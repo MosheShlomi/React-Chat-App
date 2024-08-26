@@ -8,38 +8,53 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/userStore";
 import { useChatStore } from "./lib/chatStore";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import SignUp from "./components/SignUp/SignUp";
+import ProtectedRoute from "./ProtectedRoute";
 
 const App = () => {
-  const { currentUser, isLoading, fetchUserInfo } = useUserStore();
-  const { chatId } = useChatStore();
-  useEffect(() => {
-    const unSub = onAuthStateChanged(auth, (user) => {
-      fetchUserInfo(user?.uid);
-    });
+    const { currentUser, isLoading, fetchUserInfo } = useUserStore();
+    const { chatId } = useChatStore();
 
-    return () => {
-      unSub();
-    };
-  }, [fetchUserInfo]);
+    useEffect(() => {
+        const unSub = onAuthStateChanged(auth, user => {
+            fetchUserInfo(user?.uid);
+        });
 
-  if (isLoading) {
-    return <div className="loading">Loading...</div>;
-  }
+        return () => {
+            unSub();
+        };
+    }, [fetchUserInfo]);
 
-  return (
-    <div className="container">
-      {currentUser ? (
-        <>
-          <List />
-          {chatId && <Chat />}
-          {chatId && <Detail />}
-        </>
-      ) : (
-        <Login />
-      )}
-      <Notification />
-    </div>
-  );
+    if (isLoading) {
+        return <div className="loading">Loading...</div>;
+    }
+
+    console.log(currentUser);
+
+    return (
+        <Router>
+            <Routes>
+                <Route path="/login" element={currentUser ? <Navigate to="/" /> : <Login />} />
+                <Route path="/sign-up" element={currentUser ? <Navigate to="/" /> : <SignUp />} />
+                <Route path="*" element={<Navigate to="/login" />} />
+
+                <Route
+                    path="/"
+                    element={
+                        <ProtectedRoute>
+                            <>
+                                <List />
+                                {chatId && <Chat />}
+                                {chatId && <Detail />}
+                            </>
+                        </ProtectedRoute>
+                    }
+                />
+            </Routes>
+            <Notification />
+        </Router>
+    );
 };
 
 export default App;

@@ -32,7 +32,7 @@
                 width: 100%;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: flex-start;
                 cursor: pointer;
                 text-decoration: underline;
                 font-size: 14px;
@@ -43,6 +43,7 @@
                     border-radius: 10px;
                     object-fit: cover;
                     opacity: 0.6;
+                    margin-right: 20px;
                 }
             }
 

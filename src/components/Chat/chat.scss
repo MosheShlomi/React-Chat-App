@@ -55,7 +55,6 @@
             img {
                 width: 20px;
                 height: 20px;
-
             }
         }
     }
@@ -104,9 +103,7 @@
 
                 span {
                     font-size: 13px;
-
                 }
-
             }
 
             img {
@@ -130,7 +127,6 @@
         .icons {
             display: flex;
             gap: 20px;
-
         }
 
         img {
@@ -166,7 +162,7 @@
         }
 
         .sendButton {
-            background-color: $send-btn-bg;
+            background-color: $action-btn-bg;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -174,7 +170,7 @@
             border: none;
 
             &:disabled {
-                background-color: $send-btn-disabled-bg;
+                background-color: $action-btn-disabled-bg;
                 cursor: not-allowed;
             }
         }
