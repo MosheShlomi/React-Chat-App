@@ -1,33 +1,33 @@
 .userInfo {
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .user {
+    padding: 20px;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
+    justify-content: space-between;
 
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-  }
+    .user {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
 
-  .icons {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-    
-    img {
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
+        img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
     }
-  }
+
+    .icons {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        img {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+    }
 }

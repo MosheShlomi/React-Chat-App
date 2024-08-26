@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run format && vite",
+    "format": "npx prettier --write 'src/**/*.{js,jsx,scss}'",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -14,6 +15,7 @@
     "firebase": "^10.13.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.26.1",
     "react-toastify": "^10.0.5",
     "sass": "^1.77.8",
     "zustand": "^4.5.5"
@@ -26,6 +28,7 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "prettier": "^3.3.3",
     "vite": "^5.2.0"
   }
 }
