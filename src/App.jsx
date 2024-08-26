@@ -30,8 +30,6 @@ const App = () => {
         return <div className="loading">Loading...</div>;
     }
 
-    console.log(currentUser);
-
     return (
         <Router>
             <Routes>

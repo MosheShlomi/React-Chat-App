@@ -31,7 +31,7 @@ const Detail = () => {
             <div className="user">
                 <img src={user?.avatar || "./avatar.png"} alt="" />
                 <h2>{user?.username}</h2>
-                <p>{}</p>
+                <p>{user?.status || "Here should be status phrase of the user!"}</p>
             </div>
             <div className="info">
                 <div className="option">
