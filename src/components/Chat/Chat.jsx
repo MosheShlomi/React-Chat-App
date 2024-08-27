@@ -6,6 +6,7 @@ import "./chat.scss";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
+import PhotoCapture from "./PhotoCapture/PhotoCapture";
 
 const Chat = () => {
     const [open, setOpen] = useState(false);
@@ -106,6 +107,15 @@ const Chat = () => {
         }
     };
 
+    const handleCamera = e => {
+        // if (e.target.files[0]) {
+        //     setImg({
+        //         file: e.target.files[0],
+        //         url: URL.createObjectURL(e.target.files[0]),
+        //     });
+        // }
+    };
+
     return (
         <div className="chat">
             <div className="top">
@@ -150,7 +160,7 @@ const Chat = () => {
                         <img src="./img.png" alt="" />
                     </label>
                     <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
-                    <img src="./camera.png" alt="" />
+                    <PhotoCapture handlePhoto={handleImg} />
                     <img src="./mic.png" alt="" />
                 </div>
                 <input
