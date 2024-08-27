@@ -41,7 +41,7 @@ const PhotoCapture = props => {
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
             canvas.toBlob(blob => {
-                const file = new File([blob], "captured.png", { type: "image/png" });
+                const file = new File([blob], new Date() + " - Captured.png", { type: "image/png" });
 
                 const imageUrl = URL.createObjectURL(file);
 
