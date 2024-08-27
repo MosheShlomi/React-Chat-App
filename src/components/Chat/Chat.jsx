@@ -6,6 +6,7 @@ import "./chat.scss";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
+import PhotoCapture from "./PhotoCapture/PhotoCapture";
 
 const Chat = () => {
     const [open, setOpen] = useState(false);
@@ -46,6 +47,7 @@ const Chat = () => {
                 url: URL.createObjectURL(e.target.files[0]),
             });
         }
+        endRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     const handleSend = async () => {
@@ -150,7 +152,7 @@ const Chat = () => {
                         <img src="./img.png" alt="" />
                     </label>
                     <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
-                    <img src="./camera.png" alt="" />
+                    <PhotoCapture handlePhoto={handleImg} />
                     <img src="./mic.png" alt="" />
                 </div>
                 <input
