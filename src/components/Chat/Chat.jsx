@@ -47,6 +47,7 @@ const Chat = () => {
                 url: URL.createObjectURL(e.target.files[0]),
             });
         }
+        endRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     const handleSend = async () => {
@@ -105,15 +106,6 @@ const Chat = () => {
             e.preventDefault();
             handleSend();
         }
-    };
-
-    const handleCamera = e => {
-        // if (e.target.files[0]) {
-        //     setImg({
-        //         file: e.target.files[0],
-        //         url: URL.createObjectURL(e.target.files[0]),
-        //     });
-        // }
     };
 
     return (

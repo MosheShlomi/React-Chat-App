@@ -73,17 +73,12 @@ const PhotoCapture = props => {
                 <canvas ref={canvasRef} style={{ display: "none" }} />
             </div>
             <div className="preview-window" style={{ display: !showCamera && capturedImage ? "flex" : "none" }}>
-                {capturedImage && (
-                    <img
-                        src={capturedImage}
-                        className="show-captured-photo"
-                        style={{ display: showCamera || !capturedImage ? "none" : "" }}
-                        alt="Captured"
-                    />
-                )}
-                <div className="icons-box">
-                    <img src="./done.png" className="action-icon" onClick={sendPhoto} alt="" />
-                    <img src="./retake-photo.png" className="action-icon" onClick={startCamera} alt="" />
+                <div className="preview-window-box">
+                    <img src={capturedImage} className="show-captured-photo" alt="Captured" />
+                    <div className="icons-box">
+                        <img src="./done.png" className="action-icon" onClick={sendPhoto} alt="" />
+                        <img src="./retake-photo.png" className="action-icon" onClick={startCamera} alt="" />
+                    </div>
                 </div>
             </div>
 

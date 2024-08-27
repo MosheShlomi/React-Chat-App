@@ -11,20 +11,22 @@
 }
 
 .preview-window {
+    &-box {
+        display: flex;
+        flex-direction: column;
+    }
+
     .show-captured-photo {
         width: inherit !important;
         height: auto !important;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 100;
     }
 
     .icons-box {
         display: flex;
+        justify-content: center;
         gap: 20px;
         z-index: 101;
+        margin-top: -60px;
 
         .action-icon {
             width: 50px !important;
