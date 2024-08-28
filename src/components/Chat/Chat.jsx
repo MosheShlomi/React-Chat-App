@@ -125,10 +125,8 @@ const Chat = () => {
         let audioUrl = null;
 
         try {
-            // Upload audio file to Firebase Storage
             audioUrl = await upload(audioFile);
 
-            // Add audio message to Firestore
             await updateDoc(doc(db, "chats", chatId), {
                 messages: arrayUnion({
                     senderId: currentUser.id,
@@ -137,7 +135,6 @@ const Chat = () => {
                 }),
             });
 
-            // Update the user chats
             const userIds = [currentUser.id, user.id];
             userIds.forEach(async id => {
                 const userChatsRef = doc(db, "userchats", id);
@@ -161,8 +158,6 @@ const Chat = () => {
             console.error("Error sending audio message:", err);
         }
     };
-
-    console.log(chat?.messages);
 
     return (
         <div className="chat">
