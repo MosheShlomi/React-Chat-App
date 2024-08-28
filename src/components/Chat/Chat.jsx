@@ -7,6 +7,8 @@ import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
 import PhotoCapture from "./PhotoCapture/PhotoCapture";
+import VoiceCapture from "./VoiceCapture/VoiceCapture";
+import { formatTimeAgo } from "../../../utils/formatTimeAgo";
 
 const Chat = () => {
     const [open, setOpen] = useState(false);
@@ -34,6 +36,14 @@ const Chat = () => {
             unSub();
         };
     }, [chatId]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setChat(prev => ({ ...prev }));
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     const handleEmojiClick = e => {
         setText(prev => prev + e.emoji);
@@ -108,6 +118,52 @@ const Chat = () => {
         }
     };
 
+    const handleAudio = async e => {
+        if (!e.target.files[0]) return;
+
+        const audioFile = e.target.files[0];
+        let audioUrl = null;
+
+        try {
+            // Upload audio file to Firebase Storage
+            audioUrl = await upload(audioFile);
+
+            // Add audio message to Firestore
+            await updateDoc(doc(db, "chats", chatId), {
+                messages: arrayUnion({
+                    senderId: currentUser.id,
+                    audio: audioUrl,
+                    createdAt: new Date(),
+                }),
+            });
+
+            // Update the user chats
+            const userIds = [currentUser.id, user.id];
+            userIds.forEach(async id => {
+                const userChatsRef = doc(db, "userchats", id);
+                const userChatsSnapshot = await getDoc(userChatsRef);
+
+                if (userChatsSnapshot.exists()) {
+                    const userChatsData = userChatsSnapshot.data();
+
+                    const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
+
+                    userChatsData.chats[chatIndex].lastMessage = "Audio Message";
+                    userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
+                    userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+                    await updateDoc(userChatsRef, {
+                        chats: userChatsData.chats,
+                    });
+                }
+            });
+        } catch (err) {
+            console.error("Error sending audio message:", err);
+        }
+    };
+
+    console.log(chat?.messages);
+
     return (
         <div className="chat">
             <div className="top">
@@ -129,13 +185,14 @@ const Chat = () => {
                 {chat?.messages?.map(message => (
                     <div
                         className={`message ${message.senderId === currentUser?.id ? "own" : ""}`}
-                        key={message?.createdAt}
+                        key={message?.createdAt?.seconds}
                     >
                         <div className="texts">
                             {message.img && <img src={message.img} alt="" />}
-                            <p>{message.text}</p>
-                            {/* <span>{message?.createdAt}</span> */}
+                            {message.audio && <audio controls src={message.audio}></audio>}
+                            {message.text && <p>{message.text}</p>}
                         </div>
+                        <span>{formatTimeAgo(message.createdAt)}</span>
                     </div>
                 ))}
                 {img.url && (
@@ -153,7 +210,7 @@ const Chat = () => {
                     </label>
                     <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
                     <PhotoCapture handlePhoto={handleImg} />
-                    <img src="./mic.png" alt="" />
+                    <VoiceCapture handleAudio={handleAudio} />
                 </div>
                 <input
                     type="text"
