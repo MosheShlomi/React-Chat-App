@@ -24,6 +24,13 @@ const PhotoCapture = props => {
             });
     };
 
+    const stopCamera = () => {
+        if (videoRef.current.srcObject) {
+            videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            videoRef.current.srcObject = null;
+        }
+    };
+
     const capturePhoto = () => {
         try {
             const canvas = canvasRef.current;
@@ -56,6 +63,7 @@ const PhotoCapture = props => {
     };
 
     const sendPhoto = () => {
+        stopCamera();
         const syntheticEvent = {
             target: {
                 files: [file],
