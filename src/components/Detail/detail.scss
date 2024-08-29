@@ -2,7 +2,9 @@
 
 .detail {
     flex: 1;
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 
     .user {
         padding: 30px 20px;
@@ -11,6 +13,7 @@
         align-items: center;
         gap: 15px;
         border: 1px solid $section-divider;
+        flex: 0 0 auto;
 
         img {
             width: 100px;
@@ -24,65 +27,47 @@
         padding: 20px;
         display: flex;
         flex-direction: column;
-        gap: 25px;
+        gap: 15px;
+        flex: 1 1 auto;
+        overflow-y: auto;
 
-        .option {
-            .title {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
+        .MuiAccordion-root {
+            background-color: $input-bg;
+            color: white;
+            border: 1px solid $section-divider;
 
-                img {
-                    width: 30px;
-                    height: 30px;
-                    background-color: $icon-bg;
-                    padding: 10px;
-                    cursor: pointer;
-                    border-radius: 50%;
-                }
+            svg {
+                color: white;
             }
 
-            .photos {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                padding-top: 10px;
+            .MuiAccordionDetails-root {
+                border-top: 1px solid white;
+                padding: 16px;
+            }
+        }
 
-                .downloadIcon {
-                    width: 30px;
-                    height: 30px;
-                    padding: 10px;
-                    border-radius: 50%;
+        .photos {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            overflow: auto;
+            
+            gap: 10px;
+
+            .photoItem {
+
+                .photoDetail {
                     cursor: pointer;
-                    background-color: $icon-bg;
-                }
 
-                .photoItem {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    .photoDetail {
-                        display: flex;
-                        align-items: center;
-                        gap: 20px;
-
-                        img {
-                            width: 40px;
-                            height: 40px;
-                            border-radius: 5px;
-                            object-fit: cover;
-                        }
-
-                        span {
-                            font-size: 14px;
-                            font-weight: 300;
-                            color: lightgray;
-                        }
+                    img {
+                        height: 40px;
+                        width: 40px;
+                        object-fit: cover;
                     }
                 }
             }
         }
+
 
         button {
             padding: 15px;
@@ -99,6 +84,10 @@
 
             &.logout {
                 background-color: $action-btn-bg;
+
+                &:hover {
+                    background-color: $action-btn-bg-hover;
+                }
             }
         }
     }

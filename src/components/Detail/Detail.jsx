@@ -1,16 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./detail.scss";
 import { auth, db } from "../../lib/firebase";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
-import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, updateDoc, getDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Button } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const Detail = () => {
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
     const { currentUser } = useUserStore();
+    const [sharedPhotos, setSharedPhotos] = useState([]);
+    const [sharedFiles, setSharedFiles] = useState([]);
+    const [expanded, setExpanded] = useState(false); // State to track which accordion is expanded
     const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
-    const handleBlock = async e => {
+    const handleAccordionChange = panel => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+
+    const fetchSharedData = async () => {
+        try {
+            const chatDoc = await getDoc(doc(db, "chats", chatId));
+            if (chatDoc.exists()) {
+                const data = chatDoc.data();
+                console.log(data);
+
+                const sharedPhotos = data.messages.filter(message => message.img).map(message => message.img);
+
+                setSharedPhotos(sharedPhotos);
+                setSharedFiles(data.sharedFiles || []);
+            } else {
+                setSharedPhotos([]);
+                setSharedFiles([]);
+            }
+        } catch (error) {
+            console.error("Error fetching shared data: ", error);
+            toast.error("Error fetching shared data.");
+        }
+    };
+
+    useEffect(() => {
+        if (chatId && expanded === "panel2") {
+            // Check if the correct accordion is expanded
+            fetchSharedData();
+        }
+    }, [chatId, expanded]);
+
+    const handleBlock = async () => {
         if (!user) {
             return;
         }
@@ -18,9 +56,17 @@ const Detail = () => {
         const userDocRef = doc(db, "users", currentUser.id);
 
         try {
-            await updateDoc(userDocRef, {
-                blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id),
-            });
+            if (isReceiverBlocked) {
+                await updateDoc(userDocRef, {
+                    blocked: arrayRemove(user.id),
+                });
+                toast.success(`${user.username} Unblocked!`);
+            } else {
+                await updateDoc(userDocRef, {
+                    blocked: arrayUnion(user.id),
+                });
+                toast.success(`${user.username} Blocked!`);
+            }
 
             changeBlock();
         } catch (err) {
@@ -31,76 +77,84 @@ const Detail = () => {
     return (
         <div className="detail">
             <div className="user">
-                <img src={user?.avatar || `${publicUrl}/avatar.png`} alt="" />
+                <img
+                    src={
+                        user.avatar && !isCurrentUserBlocked && !isReceiverBlocked
+                            ? user.avatar
+                            : `${publicUrl}/avatar.png`
+                    }
+                    alt=""
+                />
                 <h2>{user?.username}</h2>
                 <p>{user?.status || "Here should be status phrase of the user!"}</p>
             </div>
             <div className="info">
-                <div className="option">
-                    <div className="title">
-                        <span>Chat Settings</span>
-                        <img src={`${publicUrl}/arrowUp.png`} alt="" />
-                    </div>
-                </div>
-                <div className="option">
-                    <div className="title">
-                        <span>Privacy & help</span>
-                        <img src={`${publicUrl}/arrowUp.png`} alt="" />
-                    </div>
-                </div>
-                <div className="option">
-                    <div className="title">
-                        <span>Shared photos</span>
-                        <img src={`${publicUrl}/arrowDown.png`} alt="" />
-                    </div>
-                    <div className="photos">
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img src={`${publicUrl}/bg.jpg`} alt="" />
-                                <span>photo.png</span>
-                            </div>
-                            <img src={`${publicUrl}/download.jpg`} alt="" className="downloadIcon" />
-                        </div>
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img src={`${publicUrl}/bg.jpg`} alt="" />
-                                <span>photo.png</span>
-                            </div>
-                            <img src={`${publicUrl}/download.jpg`} alt="" className="downloadIcon" />
-                        </div>
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img src={`${publicUrl}/bg.jpg`} alt="" />
-                                <span>photo.png</span>
-                            </div>
-                            <img src={`${publicUrl}/download.jpg`} alt="" className="downloadIcon" />
-                        </div>
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img src={`${publicUrl}/bg.jpg`} alt="" />
-                                <span>photo.png</span>
-                            </div>
-                            <img src={`${publicUrl}/download.jpg`} alt="" className="downloadIcon" />
-                        </div>
-                    </div>
-                </div>
-                <div className="option">
-                    <div className="title">
-                        <span>Shared Files</span>
-                        <img src={`${publicUrl}/arrowUp.png`} alt="" />
-                    </div>
-                </div>
+                <Accordion expanded={expanded === "panel1"} onChange={handleAccordionChange("panel1")}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>Chat Settings</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography>Chat settings content goes here...</Typography>
+                    </AccordionDetails>
+                </Accordion>
 
-                <button onClick={handleBlock}>
+                <Accordion expanded={expanded === "panel2"} onChange={handleAccordionChange("panel2")}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>Shared Photos</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className="photos">
+                            {sharedPhotos.map((url, index) => (
+                                <div className="photoItem" key={index}>
+                                    <div className="photoDetail">
+                                        <a href={url} target="_blank" rel="noopener noreferrer">
+                                            <img src={url} alt={`Shared photo ${index}`} />
+                                        </a>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </AccordionDetails>
+                </Accordion>
+
+                <Accordion expanded={expanded === "panel3"} onChange={handleAccordionChange("panel3")}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>Shared Files</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className="files">
+                            {sharedFiles.map((file, index) => (
+                                <div className="fileItem" key={index}>
+                                    <Typography>{file.name}</Typography>
+                                    <Button variant="outlined" href={file.url} download>
+                                        Download
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    </AccordionDetails>
+                </Accordion>
+
+                <Accordion expanded={expanded === "panel4"} onChange={handleAccordionChange("panel4")}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>Privacy & Help</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography>Privacy and help content goes here...</Typography>
+                    </AccordionDetails>
+                </Accordion>
+
+                <Button onClick={handleBlock} variant="contained" color={isReceiverBlocked ? "secondary" : "primary"}>
                     {isCurrentUserBlocked
                         ? "You are blocked!"
                         : isReceiverBlocked
                           ? "You blocked this user! Click again to unblock."
                           : "Block user!"}
-                </button>
-                <button className="logout" onClick={() => auth.signOut()}>
+                </Button>
+
+                <Button className="logout" onClick={() => auth.signOut()} variant="contained" color="error">
                     Logout
-                </button>
+                </Button>
             </div>
         </div>
     );
