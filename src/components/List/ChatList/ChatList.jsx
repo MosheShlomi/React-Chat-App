@@ -5,6 +5,7 @@ import { useUserStore } from "../../../lib/userStore";
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { useChatStore } from "../../../lib/chatStore";
+import Dialog from "@mui/material/Dialog";
 
 const ChatList = () => {
     const [addMode, setAddMode] = useState(false);
@@ -69,12 +70,7 @@ const ChatList = () => {
                     <img src="./search.png" alt="" />
                     <input type="text" placeholder="Search username..." onChange={e => setInput(e.target.value)} />
                 </div>
-                <img
-                    src={addMode ? "./minus.png" : "./plus.png"}
-                    className="add"
-                    onClick={() => setAddMode(prev => !prev)}
-                    alt=""
-                />
+                <img src="./edit.png" className="add" onClick={() => setAddMode(prev => !prev)} alt="" />
             </div>
             {filteredChats.map(chat => (
                 <div className="item" key={chat.chatId} onClick={() => handleSelect(chat)}>
@@ -87,7 +83,9 @@ const ChatList = () => {
                 </div>
             ))}
 
-            {addMode && <AddUser />}
+            <Dialog onClose={() => setAddMode(prev => !prev)} open={addMode}>
+                <AddUser />
+            </Dialog>
         </div>
     );
 };

@@ -77,21 +77,23 @@ const AddUser = () => {
     };
 
     return (
-        <div className="addUser">
-            <form onSubmit={handleSearch}>
-                <input type="text" name="username" placeholder="Username" />
-                <button>Search</button>
-            </form>
-            {user && (
-                <div className="user">
-                    <div className="detail">
-                        <img src={user.avatar || "./avatar.png"} alt="" />
-                        <span>{user.username}</span>
+        <>
+            <div className="addUser">
+                <form onSubmit={handleSearch}>
+                    <input type="text" name="username" placeholder="Username" />
+                    <button>Search</button>
+                </form>
+                {user && (
+                    <div className="user">
+                        <div className="detail">
+                            <img src={user.avatar || "./avatar.png"} alt="" />
+                            <span>{user.username}</span>
+                        </div>
+                        <button onClick={handleAddUser}>Add User</button>
                     </div>
-                    <button onClick={handleAddUser}>Add User</button>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </>
     );
 };
 

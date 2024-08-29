@@ -90,7 +90,7 @@ const PhotoCapture = props => {
                 </div>
             </div>
 
-            <img src="./camera.png" alt="" onClick={startCamera} />
+            <img src="/camera.png" alt="" onClick={startCamera} />
         </div>
     );
 };
