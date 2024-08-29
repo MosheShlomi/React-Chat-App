@@ -63,7 +63,7 @@ const SignUp = () => {
                 <h2>Create an Account</h2>
                 <form onSubmit={handleRegister}>
                     <label htmlFor="file">
-                        <img src={avatar.url || "./avatar.png"} alt="" />
+                        <img src={avatar.url || import.meta.env.VITE_PUBLIC_URL + "./avatar.png"} alt="" />
                         Upload an image
                     </label>
                     <input type="file" id="file" style={{ display: "none" }} onChange={handleAvatar} />

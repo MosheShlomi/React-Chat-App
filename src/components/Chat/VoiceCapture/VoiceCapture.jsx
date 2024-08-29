@@ -10,6 +10,7 @@ const VoiceCapture = props => {
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
     const timerRef = useRef(null);
+    const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
     const startRecording = () => {
         setIsRecording(true);
@@ -91,7 +92,7 @@ const VoiceCapture = props => {
             <div className="audio-window" style={{ display: isRecording ? "block" : "none" }}>
                 <button id="speech" className="btn" onClick={stopRecording}>
                     <div className="pulse-ring"></div>
-                    <img src="./mic.png" alt="" />
+                    <img src={`${publicUrl}/mic.png`} alt="" />
                 </button>
 
                 <div className="timer">{formatTime(recordingTime)}</div>
@@ -101,13 +102,18 @@ const VoiceCapture = props => {
                 <div className="preview-window-box">
                     <audio controls src={audioURL} className="show-recorded-audio"></audio>
                     <div className="icons-box">
-                        <img src="./done.png" className="action-icon" onClick={sendAudio} alt="Send" />
-                        <img src="./repeat.png" className="action-icon" onClick={startRecording} alt="Retake" />
+                        <img src={`${publicUrl}/done.png`} className="action-icon" onClick={sendAudio} alt="Send" />
+                        <img
+                            src={`${publicUrl}/repeat.png`}
+                            className="action-icon"
+                            onClick={startRecording}
+                            alt="Retake"
+                        />
                     </div>
                 </div>
             </div>
 
-            <img src="./mic.png" alt="Start Recording" onClick={startRecording} />
+            <img src={`${publicUrl}/mic.png`} alt="Start Recording" onClick={startRecording} />
         </div>
     );
 };

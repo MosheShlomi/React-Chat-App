@@ -22,6 +22,7 @@ const Chat = () => {
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
     const { currentUser } = useUserStore();
     const endRef = useRef(null);
+    const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -163,7 +164,7 @@ const Chat = () => {
         <div className="chat">
             <div className="top">
                 <div className="user">
-                    <img src={user?.avatar || "./avatar.png"} alt="" />
+                    <img src={user?.avatar || `${publicUrl}/avatar.png`} alt="" />
                     <div className="texts">
                         <span>{user?.username}</span>
                         <p>{user?.status || "Here should be status phrase of the user!"}</p>
@@ -171,9 +172,9 @@ const Chat = () => {
                 </div>
 
                 <div className="icons">
-                    <img src="./phone.png" alt="" />
-                    <img src="./video.png" alt="" />
-                    <img src="./info.png" alt="" />
+                    <img src={`${publicUrl}/phone.png`} alt="" />
+                    <img src={`${publicUrl}/video.png`} alt="" />
+                    <img src={`${publicUrl}/info.png`} alt="" />
                 </div>
             </div>
             <div className="center">
@@ -201,7 +202,7 @@ const Chat = () => {
             <div className="bottom">
                 <div className="icons">
                     <label htmlFor="file">
-                        <img src="./img.png" alt="" />
+                        <img src={`${publicUrl}/img.png`} alt="" />
                     </label>
                     <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
                     <PhotoCapture handlePhoto={handleImg} />
@@ -221,7 +222,7 @@ const Chat = () => {
                         disabled={isCurrentUserBlocked || isReceiverBlocked}
                     />
                     <div className="emoji">
-                        <img src="./emoji.png" alt="" onClick={() => setOpen(prev => !prev)} />
+                        <img src={`${publicUrl}/emoji.png`} alt="" onClick={() => setOpen(prev => !prev)} />
                         <div className="picker">
                             <EmojiPicker open={open} onEmojiClick={handleEmojiClick} />
                         </div>
