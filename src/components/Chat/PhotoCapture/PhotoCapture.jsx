@@ -8,6 +8,7 @@ const PhotoCapture = props => {
     const [showCamera, setShowCamera] = useState(false);
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
+    const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
     const startCamera = () => {
         setShowCamera(true);
@@ -77,20 +78,25 @@ const PhotoCapture = props => {
         <div>
             <div className="video-window" style={{ display: showCamera ? "flex" : "none" }}>
                 <video ref={videoRef} />
-                <img src="./photo-capture.svg" className="action-icon" alt="" onClick={capturePhoto} />
+                <img src={`${publicUrl}/photo-capture.svg`} className="action-icon" alt="" onClick={capturePhoto} />
                 <canvas ref={canvasRef} style={{ display: "none" }} />
             </div>
             <div className="preview-window" style={{ display: !showCamera && capturedImage ? "flex" : "none" }}>
                 <div className="preview-window-box">
                     <img src={capturedImage} className="show-captured-photo" alt="Captured" />
                     <div className="icons-box">
-                        <img src="./done.png" className="action-icon" onClick={sendPhoto} alt="" />
-                        <img src="./retake-photo.png" className="action-icon" onClick={startCamera} alt="" />
+                        <img src={`${publicUrl}/done.png`} className="action-icon" onClick={sendPhoto} alt="" />
+                        <img
+                            src={`${publicUrl}/retake-photo.png`}
+                            className="action-icon"
+                            onClick={startCamera}
+                            alt=""
+                        />
                     </div>
                 </div>
             </div>
 
-            <img src="./camera.png" alt="" onClick={startCamera} />
+            <img src={`${publicUrl}/camera.png`} alt="" onClick={startCamera} />
         </div>
     );
 };

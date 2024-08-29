@@ -78,7 +78,50 @@ body {
                 margin: 20vh 0;
             }
         }
+
+        .chat .bottom {
+            flex-direction: column;
+
+            .sendButton {
+                width: 100%;
+            }
+        }
     }
+}
+
+@media screen and (max-width: 800px) {
+    .container .chat {
+        .center {
+            height: 60vh;
+            overflow: auto;
+            flex: auto;
+
+            .message {
+                max-width: fit-content;
+            }
+        }
+
+        .bottom {
+            .icons {
+                flex-direction: row;
+            }
+
+            .emoji {
+                display: none;
+            }
+        }
+    }
+
+    .login-container {
+        width: 80%;
+        height: auto;
+        min-width: auto;
+        min-height: auto;
+    }
+}
+
+.MuiDialog-paper {
+    background-color: transparent !important;
 }
 
 //Scrollbar styling

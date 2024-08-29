@@ -5,6 +5,7 @@ import { useUserStore } from "../../../lib/userStore";
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { useChatStore } from "../../../lib/chatStore";
+import Dialog from "@mui/material/Dialog";
 
 const ChatList = () => {
     const [addMode, setAddMode] = useState(false);
@@ -13,6 +14,7 @@ const ChatList = () => {
 
     const { currentUser } = useUserStore();
     const { chatId, changeChat } = useChatStore();
+    const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, "userchats", currentUser.id), async res => {
@@ -66,19 +68,21 @@ const ChatList = () => {
         <div className="chatList">
             <div className="search">
                 <div className="searchBar">
-                    <img src="./search.png" alt="" />
+                    <img src={`${publicUrl}/search.png`} alt="" />
                     <input type="text" placeholder="Search username..." onChange={e => setInput(e.target.value)} />
                 </div>
-                <img
-                    src={addMode ? "./minus.png" : "./plus.png"}
-                    className="add"
-                    onClick={() => setAddMode(prev => !prev)}
-                    alt=""
-                />
+                <img src={`${publicUrl}/edit.png`} className="add" onClick={() => setAddMode(prev => !prev)} alt="" />
             </div>
             {filteredChats.map(chat => (
                 <div className="item" key={chat.chatId} onClick={() => handleSelect(chat)}>
-                    <img src={chat.user.blocked.includes(currentUser.id) ? "./avatar.png" : chat.user.avatar} alt="" />
+                    <img
+                        src={
+                            chat.user.blocked.includes(currentUser.id) || !chat.user.avatar
+                                ? `${publicUrl}/avatar.png`
+                                : chat.user.avatar
+                        }
+                        alt=""
+                    />
                     <div className="texts">
                         <span>{chat.user.blocked.includes(currentUser.id) ? "User" : chat.user.username}</span>
                         <p>{chat.lastMessage}</p>
@@ -87,7 +91,9 @@ const ChatList = () => {
                 </div>
             ))}
 
-            {addMode && <AddUser />}
+            <Dialog onClose={() => setAddMode(prev => !prev)} open={addMode}>
+                <AddUser />
+            </Dialog>
         </div>
     );
 };
