@@ -164,7 +164,14 @@ const Chat = () => {
         <div className="chat">
             <div className="top">
                 <div className="user">
-                    <img src={user?.avatar || `${publicUrl}/avatar.png`} alt="" />
+                    <img
+                        src={
+                            user.avatar && !isCurrentUserBlocked && !isReceiverBlocked
+                                ? user.avatar
+                                : `${publicUrl}/avatar.png`
+                        }
+                        alt=""
+                    />
                     <div className="texts">
                         <span>{user?.username}</span>
                         <p>{user?.status || "Here should be status phrase of the user!"}</p>
