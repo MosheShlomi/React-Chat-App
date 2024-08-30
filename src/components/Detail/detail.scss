@@ -51,11 +51,10 @@
             align-items: center;
             flex-wrap: wrap;
             overflow: auto;
-            
+
             gap: 10px;
 
             .photoItem {
-
                 .photoDetail {
                     cursor: pointer;
 
@@ -68,6 +67,12 @@
             }
         }
 
+        .privacy-help-content {
+            a {
+                text-decoration: none;
+                color: #bbff0f;
+            }
+        }
 
         button {
             padding: 15px;

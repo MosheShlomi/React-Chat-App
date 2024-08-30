@@ -135,12 +135,57 @@ const Detail = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion expanded={expanded === "panel4"} onChange={handleAccordionChange("panel4")}>
+                <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Privacy & Help</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography>Privacy and help content goes here...</Typography>
+                        <div className="privacy-help-content">
+                            <ul>
+                                <li>
+                                    <Typography variant="h6">GitHub project</Typography>
+                                    <Typography paragraph>
+                                        Your opinion is important to me. So if you liked this project - please give me a
+                                        star on{" "}
+                                        <a
+                                            href="https://github.com/MosheShlomi/React-Chat-App"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Github
+                                        </a>{" "}
+                                        and fork the project.
+                                    </Typography>
+                                </li>
+                                <li>
+                                    <Typography variant="h6">Send Me an Email</Typography>
+                                    <Typography paragraph>
+                                        If you have any ideas, share them with{" "}
+                                        <a
+                                            href="mailto:folmoshe@gmail.com?subject=Support Request"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            me!
+                                        </a>
+                                    </Typography>
+                                </li>
+                                <li>
+                                    <Typography variant="h6">Resources</Typography>
+                                    <Typography paragraph>
+                                        For other projects of Bonibon, visit my{" "}
+                                        <a
+                                            href="https://github.com/MosheShlomi"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Github
+                                        </a>
+                                        !
+                                    </Typography>
+                                </li>
+                            </ul>
+                        </div>
                     </AccordionDetails>
                 </Accordion>
 
