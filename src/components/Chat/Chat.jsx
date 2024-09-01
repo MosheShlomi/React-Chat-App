@@ -10,7 +10,7 @@ import PhotoCapture from "./PhotoCapture/PhotoCapture";
 import VoiceCapture from "./VoiceCapture/VoiceCapture";
 import { formatTimeAgo } from "../../../utils/formatTimeAgo";
 
-const Chat = () => {
+const Chat = props => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
     const [chat, setChat] = useState(null);
@@ -39,6 +39,12 @@ const Chat = () => {
     }, [chatId]);
 
     useEffect(() => {
+        if (img.file) {
+            handleSend();
+        }
+    }, [img]);
+
+    useEffect(() => {
         const interval = setInterval(() => {
             setChat(prev => ({ ...prev }));
         }, 60000);
@@ -62,7 +68,7 @@ const Chat = () => {
     };
 
     const handleSend = async () => {
-        if (text === "") return;
+        if (text === "" && !img.file) return;
 
         let imgUrl = null;
 
@@ -181,7 +187,7 @@ const Chat = () => {
                 <div className="icons">
                     <img src={`${publicUrl}/phone.png`} alt="" />
                     <img src={`${publicUrl}/video.png`} alt="" />
-                    <img src={`${publicUrl}/info.png`} alt="" />
+                    <img src={`${publicUrl}/info.png`} alt="" onClick={props.handleOpenDetails} />
                 </div>
             </div>
             <div className="center">

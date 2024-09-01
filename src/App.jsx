@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Chat from "./components/Chat/Chat";
 import Detail from "./components/Detail/Detail";
 import List from "./components/List/List";
@@ -15,6 +15,7 @@ import ProtectedRoute from "./ProtectedRoute";
 const App = () => {
     const { currentUser, isLoading, fetchUserInfo } = useUserStore();
     const { chatId } = useChatStore();
+    const [showDetails, setShowDetails] = useState(false);
 
     useEffect(() => {
         const unSub = onAuthStateChanged(auth, user => {
@@ -43,8 +44,8 @@ const App = () => {
                         <ProtectedRoute>
                             <>
                                 <List />
-                                {chatId && <Chat />}
-                                {chatId && <Detail />}
+                                {chatId && <Chat handleOpenDetails={() => setShowDetails(prev => !prev)} />}
+                                {chatId && showDetails && <Detail />}
                             </>
                         </ProtectedRoute>
                     }
