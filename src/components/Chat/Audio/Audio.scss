@@ -1,0 +1,58 @@
+@import "../../../scss/utils/variables";
+
+.custom-audio-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 300px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: $audio-bg;
+
+    .custom-play-pause {
+        background-color: transparent;
+        cursor: pointer;
+        padding: 5px;
+        color: $audio-btn;
+        border: none;
+        flex: 1;
+    }
+
+    .replay-button {
+        color: $audio-btn !important;
+        cursor: pointer;
+    }
+}
+
+.custom-progress-bar {
+    flex: 2;
+    cursor: pointer;
+    appearance: none;
+    height: 5px;
+    background-color: #ddd;
+    border-radius: 5px;
+    outline: none;
+    margin: 0 5px;
+}
+
+.custom-progress-bar::-webkit-slider-thumb {
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.custom-progress-bar::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.hidden-audio {
+    display: none;
+}
