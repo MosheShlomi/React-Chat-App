@@ -1,12 +1,15 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./voiceCapture.scss";
 import { toast } from "react-toastify";
+import Dialog from "@mui/material/Dialog";
+import Audio from "../Audio/Audio";
 
 const VoiceCapture = props => {
     const [isRecording, setIsRecording] = useState(false);
     const [audioURL, setAudioURL] = useState(null);
     const [file, setFile] = useState(null);
     const [recordingTime, setRecordingTime] = useState(0);
+    const [voiceMode, setVoiceMode] = useState(false);
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
     const timerRef = useRef(null);
@@ -14,6 +17,7 @@ const VoiceCapture = props => {
 
     const startRecording = () => {
         setIsRecording(true);
+        setVoiceMode(true);
         setAudioURL(null);
         setFile(null);
         setRecordingTime(0);
@@ -69,6 +73,7 @@ const VoiceCapture = props => {
 
     const sendAudio = () => {
         stopRecording();
+        setVoiceMode(false);
         const syntheticEvent = {
             target: {
                 files: [file],
@@ -88,33 +93,36 @@ const VoiceCapture = props => {
     }, []);
 
     return (
-        <div>
-            <div className="audio-window" style={{ display: isRecording ? "block" : "none" }}>
-                <button id="speech" className="btn" onClick={stopRecording}>
-                    <div className="pulse-ring"></div>
-                    <img src={`${publicUrl}/mic.png`} alt="" />
-                </button>
+        <>
+            <Dialog onClose={() => setVoiceMode(prev => !prev)} open={voiceMode}>
+                <div className="audio-window" style={{ display: isRecording ? "block" : "none" }}>
+                    <button id="speech" className="btn" onClick={stopRecording}>
+                        <div className="pulse-ring"></div>
+                        <img src={`${publicUrl}/mic.png`} alt="" />
+                    </button>
 
-                <div className="timer">{formatTime(recordingTime)}</div>
-            </div>
+                    <div className="timer">{formatTime(recordingTime)}</div>
+                </div>
 
-            <div className="audio-window" style={{ display: !isRecording && audioURL ? "flex" : "none" }}>
-                <div className="preview-window-box">
-                    <audio controls src={audioURL} className="show-recorded-audio"></audio>
-                    <div className="icons-box">
-                        <img src={`${publicUrl}/done.png`} className="action-icon" onClick={sendAudio} alt="Send" />
-                        <img
-                            src={`${publicUrl}/repeat.png`}
-                            className="action-icon"
-                            onClick={startRecording}
-                            alt="Retake"
-                        />
+                <div className="audio-window" style={{ display: !isRecording && audioURL ? "flex" : "none" }}>
+                    <div className="preview-window-box">
+                        {/* <audio controls src={audioURL} className="show-recorded-audio"></audio> */}
+                        <Audio src={audioURL} />
+
+                        <div className="icons-box">
+                            <img src={`${publicUrl}/done.png`} className="action-icon" onClick={sendAudio} alt="Send" />
+                            <img
+                                src={`${publicUrl}/repeat.png`}
+                                className="action-icon"
+                                onClick={startRecording}
+                                alt="Retake"
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
-
+            </Dialog>
             <img src={`${publicUrl}/mic.png`} alt="Start Recording" onClick={startRecording} />
-        </div>
+        </>
     );
 };
 

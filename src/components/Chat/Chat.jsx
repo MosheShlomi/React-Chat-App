@@ -9,6 +9,7 @@ import upload from "../../lib/upload";
 import PhotoCapture from "./PhotoCapture/PhotoCapture";
 import VoiceCapture from "./VoiceCapture/VoiceCapture";
 import { formatTimeAgo } from "../../../utils/formatTimeAgo";
+import Audio from "./Audio/Audio";
 
 const Chat = props => {
     const [open, setOpen] = useState(false);
@@ -198,7 +199,7 @@ const Chat = props => {
                     >
                         <div className="texts">
                             {message.img && <img src={message.img} alt="" />}
-                            {message.audio && <audio controls src={message.audio}></audio>}
+                            {message.audio && <Audio src={message.audio} />}
                             {message.text && <p>{message.text}</p>}
                         </div>
                         <span>{formatTimeAgo(message.createdAt)}</span>
