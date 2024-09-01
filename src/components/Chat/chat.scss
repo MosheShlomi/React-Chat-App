@@ -55,6 +55,7 @@
             img {
                 width: 20px;
                 height: 20px;
+                cursor: pointer;
             }
         }
     }
@@ -69,6 +70,7 @@
 
         .message {
             max-width: 70%;
+            width: max-content;
             display: flex;
             flex-direction: column;
             gap: 8px;

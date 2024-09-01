@@ -1,10 +1,10 @@
 .video-window,
 .preview-window {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 100;
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    // z-index: 100;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -35,6 +35,7 @@
             background-color: white;
             padding: 10px;
             position: relative;
+            cursor: pointer;
         }
     }
 }
@@ -46,4 +47,5 @@
     border-radius: 10px;
     position: absolute;
     bottom: 10px;
+    cursor: pointer;
 }

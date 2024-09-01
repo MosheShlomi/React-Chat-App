@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./detail.scss";
-import { auth, db } from "../../lib/firebase";
+import { db } from "../../lib/firebase";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion, doc, updateDoc, getDoc } from "firebase/firestore";
@@ -195,10 +195,6 @@ const Detail = () => {
                         : isReceiverBlocked
                           ? "You blocked this user! Click again to unblock."
                           : "Block user!"}
-                </Button>
-
-                <Button className="logout" onClick={() => auth.signOut()} variant="contained" color="error">
-                    Logout
                 </Button>
             </div>
         </div>
