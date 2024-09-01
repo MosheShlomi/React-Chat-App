@@ -106,7 +106,6 @@ const VoiceCapture = props => {
 
                 <div className="audio-window" style={{ display: !isRecording && audioURL ? "flex" : "none" }}>
                     <div className="preview-window-box">
-                        {/* <audio controls src={audioURL} className="show-recorded-audio"></audio> */}
                         <Audio src={audioURL} />
 
                         <div className="icons-box">
