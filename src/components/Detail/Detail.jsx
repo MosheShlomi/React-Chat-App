@@ -94,7 +94,15 @@ const Detail = () => {
                         <Typography>Chat Settings</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography>Chat settings content goes here...</Typography>
+                        <div className="privacy-help-content">
+                            <ul>
+                                <li>
+                                    <Button variant="contained" color="primary">
+                                        Delete the chat
+                                    </Button>
+                                </li>
+                            </ul>
+                        </div>
                     </AccordionDetails>
                 </Accordion>
 

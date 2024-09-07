@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./addUser.scss";
 import { toast } from "react-toastify";
 import {
@@ -6,6 +6,7 @@ import {
     collection,
     doc,
     getDocs,
+    getDoc,
     query,
     serverTimestamp,
     setDoc,
@@ -14,37 +15,58 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 import { useUserStore } from "../../../../lib/userStore";
+import { deleteDoc } from "firebase/firestore"; // Add this to your imports
 
 const AddUser = () => {
-    const [user, setUser] = useState(null);
+    const [users, setUsers] = useState([]);
     const { currentUser } = useUserStore();
+    const [searchText, setSearchText] = useState("");
+    const [searchPerformed, setSearchPerformed] = useState(false);
 
     const handleSearch = async e => {
         e.preventDefault();
 
-        const formData = new FormData(e.target);
+        const trimmedSearchText = searchText.trim().toLowerCase();
 
-        const username = formData.get("username");
+        if (!trimmedSearchText) {
+            toast.error("Please enter a username.");
+            return;
+        }
 
         try {
+            // Fetch all users from the users collection
             const userRef = collection(db, "users");
+            const querySnapShot = await getDocs(userRef);
 
-            const q = query(userRef, where("username", "==", username));
+            const allUsers = querySnapShot.docs.map(doc => doc.data());
 
-            const querySnapShot = await getDocs(q);
+            // Filter users whose usernames contain the searchText
+            const filteredUsers = allUsers.filter(user => user.username.toLowerCase().includes(trimmedSearchText));
 
-            if (!querySnapShot.empty) {
-                setUser(querySnapShot.docs[0].data());
-            }
+            // Fetch the current user's chats
+            const userChatsRef = doc(db, "userchats", currentUser.id);
+            const userChatsSnapShot = await getDoc(userChatsRef);
+
+            const userChatsData = userChatsSnapShot.exists() ? userChatsSnapShot.data() : {};
+            const chats = userChatsData.chats || [];
+
+            const updatedUsers = filteredUsers.map(user => ({
+                ...user,
+                isAlreadyInChat: chats.some(chat => chat.receiverId === user.id),
+            }));
+
+            setUsers(updatedUsers);
+            setSearchPerformed(true);
         } catch (err) {
             console.error(err);
-            toast.error("Error while searching username!");
+            toast.error("Error while searching users!");
         }
     };
 
-    const handleAddUser = async e => {
+    const handleAddUser = async userId => {
         const chatRef = collection(db, "chats");
         const userChatsRef = collection(db, "userchats");
+
         try {
             const newChatRef = doc(chatRef);
 
@@ -53,7 +75,7 @@ const AddUser = () => {
                 messages: [],
             });
 
-            await updateDoc(doc(userChatsRef, user.id), {
+            await updateDoc(doc(userChatsRef, userId), {
                 chats: arrayUnion({
                     chatId: newChatRef.id,
                     lastMessage: "",
@@ -66,34 +88,74 @@ const AddUser = () => {
                 chats: arrayUnion({
                     chatId: newChatRef.id,
                     lastMessage: "",
-                    receiverId: user.id,
+                    receiverId: userId,
                     updatedAt: Date.now(),
                 }),
             });
+
+            toast.success("User added successfully!");
+
+            setUsers(prevUsers =>
+                prevUsers.map(user => (user.id === userId ? { ...user, isAlreadyInChat: true } : user))
+            );
         } catch (err) {
             console.error(err);
             toast.error("Error while adding user!");
         }
     };
 
+    // useEffect(() => {
+    //     const addUserChats = async () => {
+    //         // Fetch all users from the users collection
+    //         const userRef = collection(db, "users");
+    //         const querySnapShot = await getDocs(userRef);
+
+    //         const allUsers = querySnapShot.docs.map(doc => doc.data());
+
+    //         console.log(allUsers);
+
+    //         allUsers.map(async user => {
+    //             await setDoc(doc(db, "userchats", user.id), {
+    //                 chats: [],
+    //             });
+    //         });
+    //     };
+
+    //     return () => {
+    //         // addUserChats();
+    //     };
+    // }, []);
     return (
-        <>
-            <div className="addUser">
-                <form onSubmit={handleSearch}>
-                    <input type="text" name="username" placeholder="Username" />
-                    <button>Search</button>
-                </form>
-                {user && (
-                    <div className="user">
-                        <div className="detail">
-                            <img src={user.avatar || import.meta.env.VITE_PUBLIC_URL + "./avatar.png"} alt="" />
-                            <span>{user.username}</span>
-                        </div>
-                        <button onClick={handleAddUser}>Add User</button>
-                    </div>
-                )}
-            </div>
-        </>
+        <div className="addUser">
+            <form onSubmit={handleSearch}>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={searchText}
+                    onChange={e => setSearchText(e.target.value)}
+                />
+
+                <button>Search</button>
+            </form>
+            {users.length > 0
+                ? users.map(user => (
+                      <div key={user.id} className="user">
+                          <div className="detail">
+                              <img src={user.avatar || import.meta.env.VITE_PUBLIC_URL + "/avatar.png"} alt="" />
+                              <span>{user.username}</span>
+                          </div>
+                          {user.isAlreadyInChat ? (
+                              <button disabled className="exist">
+                                  Already Added
+                              </button>
+                          ) : (
+                              <button onClick={() => handleAddUser(user.id)}>Add User</button>
+                          )}
+                      </div>
+                  ))
+                : searchPerformed && <p className="no-users-info">No users found.</p>}
+        </div>
     );
 };
 

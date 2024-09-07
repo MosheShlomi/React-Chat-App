@@ -36,8 +36,11 @@
 
         .detail {
             display: flex;
+            flex-direction: row;
             align-items: center;
             gap: 20px;
+            color: white;
+            font-size: 14px;
 
             img {
                 width: 50px;
@@ -54,6 +57,19 @@
             color: white;
             border: none;
             background-color: $action-btn-bg;
+
+            &.exist {
+                background-color: $own-msg-bg;
+                cursor: not-allowed;
+            }
         }
+    }
+
+    .no-users-info {
+        display: flex;
+        justify-content: center;
+        color: white;
+        padding: 20px 20px 0;
+        align-items: center;
     }
 }

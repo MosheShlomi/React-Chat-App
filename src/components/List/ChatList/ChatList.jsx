@@ -91,6 +91,12 @@ const ChatList = () => {
                 </div>
             ))}
 
+            {filteredChats.length === 0 && (
+                <div className="no-chats-info">
+                    You don't have chats yet. Click "New Chat" button for new connections!
+                </div>
+            )}
+
             <Dialog onClose={() => setAddMode(prev => !prev)} open={addMode}>
                 <AddUser />
             </Dialog>
