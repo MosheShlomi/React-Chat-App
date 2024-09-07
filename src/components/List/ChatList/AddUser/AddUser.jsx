@@ -1,21 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./addUser.scss";
 import { toast } from "react-toastify";
-import {
-    arrayUnion,
-    collection,
-    doc,
-    getDocs,
-    getDoc,
-    query,
-    serverTimestamp,
-    setDoc,
-    updateDoc,
-    where,
-} from "firebase/firestore";
+import { arrayUnion, collection, doc, getDocs, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 import { useUserStore } from "../../../../lib/userStore";
-import { deleteDoc } from "firebase/firestore"; // Add this to your imports
 
 const AddUser = () => {
     const [users, setUsers] = useState([]);
@@ -34,7 +22,6 @@ const AddUser = () => {
         }
 
         try {
-            // Fetch all users from the users collection
             const userRef = collection(db, "users");
             const querySnapShot = await getDocs(userRef);
 
@@ -43,7 +30,6 @@ const AddUser = () => {
             // Filter users whose usernames contain the searchText
             const filteredUsers = allUsers.filter(user => user.username.toLowerCase().includes(trimmedSearchText));
 
-            // Fetch the current user's chats
             const userChatsRef = doc(db, "userchats", currentUser.id);
             const userChatsSnapShot = await getDoc(userChatsRef);
 
@@ -104,27 +90,6 @@ const AddUser = () => {
         }
     };
 
-    // useEffect(() => {
-    //     const addUserChats = async () => {
-    //         // Fetch all users from the users collection
-    //         const userRef = collection(db, "users");
-    //         const querySnapShot = await getDocs(userRef);
-
-    //         const allUsers = querySnapShot.docs.map(doc => doc.data());
-
-    //         console.log(allUsers);
-
-    //         allUsers.map(async user => {
-    //             await setDoc(doc(db, "userchats", user.id), {
-    //                 chats: [],
-    //             });
-    //         });
-    //     };
-
-    //     return () => {
-    //         // addUserChats();
-    //     };
-    // }, []);
     return (
         <div className="addUser">
             <form onSubmit={handleSearch}>
