@@ -3,13 +3,14 @@ import "./detail.scss";
 import { db } from "../../lib/firebase";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
-import { arrayRemove, arrayUnion, doc, updateDoc, getDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { Accordion, AccordionSummary, AccordionDetails, Typography, Button } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ConfirmationDialog from "../Dialogs/ConfirmationDialog";
 
 const Detail = () => {
-    const { chatId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
+    const { chatId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock, resetChat } = useChatStore();
     const { currentUser } = useUserStore();
     const [sharedPhotos, setSharedPhotos] = useState([]);
     const [sharedFiles, setSharedFiles] = useState([]);
@@ -74,6 +75,66 @@ const Detail = () => {
         }
     };
 
+    const handleDeleteChat = async () => {
+        if (!user || !currentUser) return;
+
+        try {
+            const userChatsRef = doc(db, "userchats", currentUser.id);
+            const receiverChatsRef = doc(db, "userchats", user.id);
+            const [userChatsSnap, receiverChatsSnap] = await Promise.all([
+                getDoc(userChatsRef),
+                getDoc(receiverChatsRef),
+            ]);
+
+            if (userChatsSnap.exists()) {
+                const userChatsData = userChatsSnap.data();
+                const chatToDelete = userChatsData.chats.find(chat => chat.receiverId === user.id);
+
+                if (!chatToDelete) {
+                    toast.error("Chat not found.");
+                    return;
+                }
+
+                const batchUpdates = [];
+
+                // Remove the chat from the current user's userchats document
+                batchUpdates.push(
+                    updateDoc(userChatsRef, {
+                        chats: arrayRemove(chatToDelete),
+                    })
+                );
+
+                if (receiverChatsSnap.exists()) {
+                    const receiverChatsData = receiverChatsSnap.data();
+                    const chatToRemove = receiverChatsData.chats.find(chat => chat.receiverId === currentUser.id);
+
+                    if (chatToRemove) {
+                        // Remove the chat from the receiver's userchats document
+                        batchUpdates.push(
+                            updateDoc(receiverChatsRef, {
+                                chats: arrayRemove(chatToRemove),
+                            })
+                        );
+                    }
+                }
+
+                // Delete the chat from the chats collection
+                const chatRef = doc(db, "chats", chatToDelete.chatId);
+                batchUpdates.push(deleteDoc(chatRef));
+
+                await Promise.all(batchUpdates);
+
+                toast.success("Chat deleted successfully!");
+                resetChat();
+            } else {
+                toast.error("No chats found for this user.");
+            }
+        } catch (error) {
+            console.error("Error deleting chat: ", error);
+            toast.error("Error deleting chat.");
+        }
+    };
+
     return (
         <div className="detail">
             <div className="user">
@@ -97,9 +158,29 @@ const Detail = () => {
                         <div className="privacy-help-content">
                             <ul>
                                 <li>
-                                    <Button variant="contained" color="primary">
-                                        Delete the chat
-                                    </Button>
+                                    <ConfirmationDialog
+                                        text="Are you sure to delete this chat?"
+                                        btnText="Delete the chat"
+                                        onConfirm={handleDeleteChat}
+                                    />
+                                </li>
+                                <li>
+                                    <ConfirmationDialog
+                                        text={
+                                            isReceiverBlocked
+                                                ? "Are you sure to unblock the user?"
+                                                : "Are you sure to block the user?"
+                                        }
+                                        btnText={
+                                            isCurrentUserBlocked
+                                                ? "You are blocked!"
+                                                : isReceiverBlocked
+                                                  ? "You blocked this user! Click again to unblock."
+                                                  : "Block the user"
+                                        }
+                                        onConfirm={handleBlock}
+                                        disabled={isCurrentUserBlocked}
+                                    />
                                 </li>
                             </ul>
                         </div>
@@ -122,6 +203,7 @@ const Detail = () => {
                                 </div>
                             ))}
                         </div>
+                        {sharedPhotos.length === 0 && <div className="no-data" >No photos yet!</div>}
                     </AccordionDetails>
                 </Accordion>
 
@@ -196,14 +278,6 @@ const Detail = () => {
                         </div>
                     </AccordionDetails>
                 </Accordion>
-
-                <Button onClick={handleBlock} variant="contained" color={isReceiverBlocked ? "secondary" : "primary"}>
-                    {isCurrentUserBlocked
-                        ? "You are blocked!"
-                        : isReceiverBlocked
-                          ? "You blocked this user! Click again to unblock."
-                          : "Block user!"}
-                </Button>
             </div>
         </div>
     );

@@ -10,6 +10,7 @@ const AddUser = () => {
     const { currentUser } = useUserStore();
     const [searchText, setSearchText] = useState("");
     const [searchPerformed, setSearchPerformed] = useState(false);
+    const [loadingUsers, setLoadingUsers] = useState({});
 
     const handleSearch = async e => {
         e.preventDefault();
@@ -53,6 +54,8 @@ const AddUser = () => {
         const chatRef = collection(db, "chats");
         const userChatsRef = collection(db, "userchats");
 
+        setLoadingUsers(prevState => ({ ...prevState, [userId]: true }));
+
         try {
             const newChatRef = doc(chatRef);
 
@@ -87,6 +90,8 @@ const AddUser = () => {
         } catch (err) {
             console.error(err);
             toast.error("Error while adding user!");
+        } finally {
+            setLoadingUsers(prevState => ({ ...prevState, [userId]: false }));
         }
     };
 
@@ -115,7 +120,9 @@ const AddUser = () => {
                                   Already Added
                               </button>
                           ) : (
-                              <button onClick={() => handleAddUser(user.id)}>Add User</button>
+                              <button onClick={() => handleAddUser(user.id)} disabled={loadingUsers[user.id]}>
+                                  {loadingUsers[user.id] ? "Adding..." : "Add User"}
+                              </button>
                           )}
                       </div>
                   ))
