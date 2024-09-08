@@ -72,27 +72,16 @@
                 text-decoration: none;
                 color: #bbff0f;
             }
-        }
 
-        button {
-            padding: 15px;
-            background-color: $warning-btn-bg;
-            color: white;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-
-            &:hover {
-                background-color: $warning-btn-bg-hover;
+            li:not(:last-of-type) {
+                margin-bottom: 10px;
             }
 
-            &.logout {
-                background-color: $action-btn-bg;
-
-                &:hover {
-                    background-color: $action-btn-bg-hover;
-                }
+            .MuiButtonBase-root:disabled {
+                cursor: not-allowed;
+                pointer-events: auto;
+                color: black;
+                border: 1px solid black;
             }
         }
     }

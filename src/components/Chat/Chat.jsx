@@ -213,7 +213,7 @@ const Chat = props => {
                 <div ref={endRef}></div>
             </div>
 
-            <div className="bottom">
+            <div className="bottom" disabled={isCurrentUserBlocked || isReceiverBlocked}>
                 <div className="icons">
                     <label htmlFor="file">
                         <img src={`${publicUrl}/img.png`} alt="" />

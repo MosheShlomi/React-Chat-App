@@ -11,6 +11,7 @@ const ChatList = () => {
     const [addMode, setAddMode] = useState(false);
     const [chats, setChats] = useState([]);
     const [input, setInput] = useState("");
+    const [chatsLoaded, setChatsLoaded] = useState(false);
 
     const { currentUser } = useUserStore();
     const { chatId, changeChat } = useChatStore();
@@ -32,6 +33,7 @@ const ChatList = () => {
                 const chatData = await Promise.all(promises);
 
                 setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
+                setChatsLoaded(true);
             }
         });
         return () => {
@@ -91,7 +93,7 @@ const ChatList = () => {
                 </div>
             ))}
 
-            {filteredChats.length === 0 && (
+            {chatsLoaded && chats.length === 0 && (
                 <div className="no-chats-info">
                     You don't have chats yet. Click "New Chat" button for new connections!
                 </div>
