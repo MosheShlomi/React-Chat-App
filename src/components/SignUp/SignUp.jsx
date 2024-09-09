@@ -6,6 +6,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../lib/firebase";
 import upload from "../../lib/upload";
 import { Link } from "react-router-dom";
+import { TextField } from "@mui/material";
 
 const SignUp = () => {
     const [avatar, setAvatar] = useState({
@@ -14,6 +15,9 @@ const SignUp = () => {
     });
 
     const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
 
     const handleAvatar = e => {
         if (e.target.files[0]) {
@@ -27,9 +31,6 @@ const SignUp = () => {
     const handleRegister = async e => {
         e.preventDefault();
         setLoading(true);
-
-        const formData = new FormData(e.target);
-        const { username, email, password } = Object.fromEntries(formData);
 
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -63,14 +64,24 @@ const SignUp = () => {
                 <h2>Create an Account</h2>
                 <form onSubmit={handleRegister}>
                     <label htmlFor="file">
-                        <img src={avatar.url != "" || import.meta.env.VITE_PUBLIC_URL + "./avatar.png"} alt="" />
+                        <img src={avatar.url != "" || import.meta.env.VITE_PUBLIC_URL + "/avatar.png"} alt="" />
                         Upload an image
                     </label>
                     <input type="file" id="file" style={{ display: "none" }} onChange={handleAvatar} />
-                    <input type="text" placeholder="Username" name="username" />
-                    <input type="text" placeholder="Email" name="email" />
-
-                    <input type="password" placeholder="Password" name="password" />
+                    <TextField
+                        label="Username"
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                        fullWidth
+                    />
+                    <TextField label="Email" value={email} onChange={e => setEmail(e.target.value)} fullWidth />
+                    <TextField
+                        label="Password"
+                        value={password}
+                        type="password"
+                        onChange={e => setPassword(e.target.value)}
+                        fullWidth
+                    />
                     <div className="text">
                         Already have an account?&ensp;
                         <Link to="/login">Login now</Link>
