@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { create } from "zustand";
 import { db, auth } from "./firebase";
 
@@ -18,6 +18,13 @@ export const useUserStore = create(set => ({
 
             if (docSnap.exists()) {
                 set({ currentUser: docSnap.data(), isLoading: false, isLoggedOut: false });
+
+                // Set up a real-time listener for user data changes
+                onSnapshot(docRef, snapshot => {
+                    if (snapshot.exists()) {
+                        set({ currentUser: snapshot.data() });
+                    }
+                });
             } else {
                 set({ currentUser: null, isLoading: false, isLoggedOut: true });
             }

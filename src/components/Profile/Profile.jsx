@@ -42,7 +42,7 @@ const Profile = () => {
             let avatarUrl = currentUser.avatar;
 
             if (avatarFile) {
-                avatarUrl = await upload(avatar.file);
+                avatarUrl = await upload(avatarFile);
             }
 
             await updateDoc(userDocRef, {
