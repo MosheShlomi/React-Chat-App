@@ -108,25 +108,27 @@ const AddUser = () => {
 
                 <button>Search</button>
             </form>
-            {users.length > 0
-                ? users.map(user => (
-                      <div key={user.id} className="user">
-                          <div className="detail">
-                              <img src={user.avatar || import.meta.env.VITE_PUBLIC_URL + "/avatar.png"} alt="" />
-                              <span>{user.username}</span>
+            <div className="users-container">
+                {users.length > 0
+                    ? users.map(user => (
+                          <div key={user.id} className="user">
+                              <div className="detail">
+                                  <img src={user.avatar || import.meta.env.VITE_PUBLIC_URL + "/avatar.png"} alt="" />
+                                  <span>{user.username}</span>
+                              </div>
+                              {user.isAlreadyInChat ? (
+                                  <button disabled className="exist">
+                                      Already Added
+                                  </button>
+                              ) : (
+                                  <button onClick={() => handleAddUser(user.id)} disabled={loadingUsers[user.id]}>
+                                      {loadingUsers[user.id] ? "Adding..." : "Add User"}
+                                  </button>
+                              )}
                           </div>
-                          {user.isAlreadyInChat ? (
-                              <button disabled className="exist">
-                                  Already Added
-                              </button>
-                          ) : (
-                              <button onClick={() => handleAddUser(user.id)} disabled={loadingUsers[user.id]}>
-                                  {loadingUsers[user.id] ? "Adding..." : "Add User"}
-                              </button>
-                          )}
-                      </div>
-                  ))
-                : searchPerformed && <p className="no-users-info">No users found.</p>}
+                      ))
+                    : searchPerformed && <p className="no-users-info">No users found.</p>}
+            </div>
         </div>
     );
 };

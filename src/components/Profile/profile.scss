@@ -1,0 +1,50 @@
+@import "../../scss/utils/variables";
+
+.profile-container {
+    .profile-title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+        gap: 10px;
+    }
+
+    .profile-save-button {
+        margin-top: 20px;
+    }
+
+    .MuiTextField-root {
+        width: 100%;
+
+        .MuiOutlinedInput-root {
+            color: white;
+            background-color: $input-bg;
+
+            &:hover .MuiOutlinedInput-notchedOutline {
+                border-color: $color-secondary; // Change border color on hover
+            }
+
+            &.Mui-focused .MuiOutlinedInput-notchedOutline {
+                border-color: white; // Change border color when focused
+                color: white;
+            }
+
+            .MuiOutlinedInput-notchedOutline {
+                border-color: $color-secondary; // Set default border color
+            }
+        }
+
+        .MuiInputLabel-root {
+            color: $color-secondary; // Set label color
+
+            &.Mui-focused {
+                color: white;
+            }
+        }
+    }
+}

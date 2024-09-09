@@ -11,6 +11,8 @@ import { useChatStore } from "./lib/chatStore";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import SignUp from "./components/SignUp/SignUp";
 import ProtectedRoute from "./ProtectedRoute";
+import CircularProgress from "@mui/material/CircularProgress";
+import Profile from "./components/Profile/Profile";
 
 const App = () => {
     const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -28,7 +30,20 @@ const App = () => {
     }, [fetchUserInfo]);
 
     if (isLoading) {
-        return <div className="loading">Loading...</div>;
+        return (
+            <div className="loading">
+                <svg width={0} height={0}>
+                    <defs>
+                        <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#e01cd5" />
+                            <stop offset="100%" stopColor="#1CB5E0" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <CircularProgress sx={{ "svg circle": { stroke: "url(#my_gradient)" } }} />
+                <span>Loading...</span>
+            </div>
+        );
     }
 
     return (
@@ -42,11 +57,19 @@ const App = () => {
                     path="/"
                     element={
                         <ProtectedRoute>
-                            <>
+                            <div className="container">
                                 <List />
                                 {chatId && <Chat handleOpenDetails={() => setShowDetails(prev => !prev)} />}
                                 {chatId && showDetails && <Detail />}
-                            </>
+                            </div>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
                         </ProtectedRoute>
                     }
                 />

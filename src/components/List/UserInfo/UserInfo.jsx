@@ -5,6 +5,7 @@ import { auth } from "../../../lib/firebase";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
+import { useNavigate } from "react-router-dom";
 
 const UserInfo = () => {
     const { currentUser } = useUserStore();
@@ -12,6 +13,8 @@ const UserInfo = () => {
 
     const [moreAnchorEl, setMoreAnchorEl] = React.useState(null);
     const moreOpen = Boolean(moreAnchorEl);
+    const navigate = useNavigate();
+
     const handleClick = event => {
         setMoreAnchorEl(event.currentTarget);
     };
@@ -36,7 +39,14 @@ const UserInfo = () => {
                         "aria-labelledby": "basic-button",
                     }}
                 >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            handleClose();
+                            navigate("/profile");
+                        }}
+                    >
+                        Profile
+                    </MenuItem>
                     <Divider />
                     <MenuItem
                         onClick={() => {
