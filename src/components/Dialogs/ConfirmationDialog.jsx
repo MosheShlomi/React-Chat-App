@@ -32,10 +32,8 @@ const ConfirmationDialog = props => {
                 aria-describedby="alert-dialog-description"
             >
                 <div className="confirmation-dialog">
-                    <DialogTitle id="alert-dialog-title" style={{ color: "white" }}>
-                        {props.text}
-                    </DialogTitle>
-                    <DialogContent style={{ display: "flex", justifyContent: "center", padding: "20px", gap: "20px" }}>
+                    <DialogTitle id="alert-dialog-title">{props.text}</DialogTitle>
+                    <DialogContent id="alert-dialog-content">
                         <Button onClick={handleClose} variant="outlined" color="error">
                             No
                         </Button>

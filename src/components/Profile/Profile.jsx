@@ -28,7 +28,6 @@ const Profile = () => {
         const file = e.target.files[0];
         setAvatarFile(file);
 
-        // Display the selected image
         const reader = new FileReader();
         reader.onloadend = () => {
             setAvatar(reader.result);
