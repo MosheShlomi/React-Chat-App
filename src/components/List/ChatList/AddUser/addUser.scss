@@ -26,6 +26,13 @@
         }
     }
 
+    .users-container {
+        margin-top: 20px;
+        padding-right: 10px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
     .user {
         border-top: 1px solid $section-divider;
         margin-top: 15px;

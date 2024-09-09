@@ -1,0 +1,18 @@
+@import "../../scss/utils/variables";
+
+.confirmation-dialog {
+    padding: 30px;
+    background-color: $popup-bg;
+    border-radius: 10px;
+
+    #alert-dialog-title {
+        color: white;
+    }
+
+    #alert-dialog-content {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        gap: 20px;
+    }
+}

@@ -181,7 +181,7 @@ const Chat = props => {
                     />
                     <div className="texts">
                         <span>{user?.username}</span>
-                        <p>{user?.status || "Here should be status phrase of the user!"}</p>
+                        <p>{user?.slogan || "Here should be status phrase of the user!"}</p>
                     </div>
                 </div>
 

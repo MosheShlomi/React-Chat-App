@@ -147,7 +147,7 @@ const Detail = () => {
                     alt=""
                 />
                 <h2>{user?.username}</h2>
-                <p>{user?.status || "Here should be status phrase of the user!"}</p>
+                <p>{user?.slogan || "Here should be status phrase of the user!"}</p>
             </div>
             <div className="info">
                 <Accordion expanded={expanded === "panel1"} onChange={handleAccordionChange("panel1")}>
@@ -203,7 +203,7 @@ const Detail = () => {
                                 </div>
                             ))}
                         </div>
-                        {sharedPhotos.length === 0 && <div className="no-data" >No photos yet!</div>}
+                        {sharedPhotos.length === 0 && <div className="no-data">No photos yet.</div>}
                     </AccordionDetails>
                 </Accordion>
 
@@ -222,6 +222,7 @@ const Detail = () => {
                                 </div>
                             ))}
                         </div>
+                        {sharedFiles.length === 0 && <div className="no-data">No files yet.</div>}
                     </AccordionDetails>
                 </Accordion>
 

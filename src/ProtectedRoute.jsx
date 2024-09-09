@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
         return <Navigate to="/login" />;
     }
-    return <div className="container">{children}</div>;
+    return <>{children}</>;
 };
 
 export default ProtectedRoute;
