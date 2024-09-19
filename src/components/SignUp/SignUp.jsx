@@ -90,6 +90,7 @@ const SignUp = () => {
                         value={password}
                         type="password"
                         onChange={e => setPassword(e.target.value)}
+                        autoComplete="on"
                         fullWidth
                     />
                     <TextField
@@ -97,6 +98,7 @@ const SignUp = () => {
                         value={ConfirmPassword}
                         type="password"
                         onChange={e => setConfirmPassword(e.target.value)}
+                        autoComplete="on"
                         fullWidth
                     />
                     <div className="text">

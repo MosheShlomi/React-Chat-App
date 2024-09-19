@@ -1,8 +1,8 @@
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { create } from "zustand";
-import { db, auth } from "./firebase";
+import { db } from "./firebase";
 
-export const useUserStore = create(set => ({
+export const useUserStore = create((set, get) => ({
     currentUser: null,
     isLoading: true,
     isLoggedOut: false,
@@ -18,13 +18,6 @@ export const useUserStore = create(set => ({
 
             if (docSnap.exists()) {
                 set({ currentUser: docSnap.data(), isLoading: false, isLoggedOut: false });
-
-                // Set up a real-time listener for user data changes
-                onSnapshot(docRef, snapshot => {
-                    if (snapshot.exists()) {
-                        set({ currentUser: snapshot.data() });
-                    }
-                });
             } else {
                 set({ currentUser: null, isLoading: false, isLoggedOut: true });
             }
@@ -32,18 +25,5 @@ export const useUserStore = create(set => ({
             console.log(err);
             return set({ currentUser: null, isLoading: false, isLoggedOut: true });
         }
-    },
-
-    initializeAuthListener: () => {
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                // User is logged in, fetch user info
-                set({ isLoading: true, isLoggedOut: false });
-                useUserStore.getState().fetchUserInfo(user.uid);
-            } else {
-                // User is logged out
-                set({ currentUser: null, isLoading: false, isLoggedOut: true });
-            }
-        });
     },
 }));

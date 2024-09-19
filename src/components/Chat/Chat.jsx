@@ -172,8 +172,6 @@ const Chat = props => {
         }
     };
 
-    console.log(chat);
-
     return (
         <div className="chat">
             <div className="top">
