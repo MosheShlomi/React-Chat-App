@@ -5,11 +5,14 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
 
     const handleLogin = async e => {
         e.preventDefault();
@@ -18,6 +21,7 @@ const Login = () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             toast.success("You signed in successfully!");
+            // navigate("/");
         } catch (err) {
             console.log(err);
             toast.error(err.message);
@@ -40,7 +44,7 @@ const Login = () => {
                         fullWidth
                     />
                     <div className="text">
-                        Not a member?&ensp;<Link to="/sign-up">Sign Up now</Link>
+                        Not a member?&ensp;<Link to="/sign-up">Sign Up</Link>
                     </div>
                     <button disabled={loading}>{loading ? "Loading" : "Sign in"}</button>
                 </form>

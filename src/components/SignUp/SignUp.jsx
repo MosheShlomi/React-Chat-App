@@ -7,6 +7,7 @@ import { auth, db } from "../../lib/firebase";
 import upload from "../../lib/upload";
 import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     const [avatar, setAvatar] = useState({
@@ -17,7 +18,10 @@ const SignUp = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [ConfirmPassword, setConfirmPassword] = useState("");
     const [username, setUsername] = useState("");
+
+    const navigate = useNavigate();
 
     const handleAvatar = e => {
         if (e.target.files[0]) {
@@ -30,6 +34,11 @@ const SignUp = () => {
 
     const handleRegister = async e => {
         e.preventDefault();
+
+        if (password !== ConfirmPassword) {
+            toast.error("Passwords are not the same!");
+            return;
+        }
         setLoading(true);
 
         try {
@@ -49,7 +58,8 @@ const SignUp = () => {
                 chats: [],
             });
 
-            toast.success("You registered successfully! Now login.");
+            toast.success("You registered successfully!");
+            navigate("/");
         } catch (err) {
             console.log("Registration error:", err);
             toast.error(err.message);
@@ -64,7 +74,7 @@ const SignUp = () => {
                 <h2>Create an Account</h2>
                 <form onSubmit={handleRegister}>
                     <label htmlFor="file">
-                        <img src={avatar.url != "" || import.meta.env.VITE_PUBLIC_URL + "/avatar.png"} alt="" />
+                        <img src={avatar.url ? avatar.url : `${import.meta.env.VITE_PUBLIC_URL}/avatar.png`} alt="" />
                         Upload an image
                     </label>
                     <input type="file" id="file" style={{ display: "none" }} onChange={handleAvatar} />
@@ -82,9 +92,16 @@ const SignUp = () => {
                         onChange={e => setPassword(e.target.value)}
                         fullWidth
                     />
+                    <TextField
+                        label="Confirm Password"
+                        value={ConfirmPassword}
+                        type="password"
+                        onChange={e => setConfirmPassword(e.target.value)}
+                        fullWidth
+                    />
                     <div className="text">
                         Already have an account?&ensp;
-                        <Link to="/login">Login now</Link>
+                        <Link to="/login">Login in</Link>
                     </div>
                     <button disabled={loading}>{loading ? "Loading" : "Sign up"}</button>
                 </form>
