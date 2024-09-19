@@ -5,11 +5,14 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { useUserStore } from "../../lib/userStore";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const { fetchUserInfo } = useUserStore();
 
     const handleLogin = async e => {
         e.preventDefault();
@@ -17,6 +20,7 @@ const Login = () => {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            fetchUserInfo(auth.currentUser.uid);
             toast.success("You signed in successfully!");
         } catch (err) {
             console.log(err);
@@ -37,10 +41,11 @@ const Login = () => {
                         value={password}
                         type="password"
                         onChange={e => setPassword(e.target.value)}
+                        autoComplete="on"
                         fullWidth
                     />
                     <div className="text">
-                        Not a member?&ensp;<Link to="/sign-up">Sign Up now</Link>
+                        Not a member?&ensp;<Link to="/sign-up">Sign Up</Link>
                     </div>
                     <button disabled={loading}>{loading ? "Loading" : "Sign in"}</button>
                 </form>

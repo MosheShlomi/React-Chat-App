@@ -86,7 +86,7 @@ const ChatList = () => {
                         alt=""
                     />
                     <div className="texts">
-                        <span>{chat.user.blocked.includes(currentUser.id) ? "User" : chat.user.username}</span>
+                        <span>{chat.user.username}</span>
                         <p>{chat.lastMessage}</p>
                         {!chat?.isSeen && <span className="isSeen"></span>}
                     </div>

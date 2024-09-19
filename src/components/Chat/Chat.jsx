@@ -10,6 +10,9 @@ import PhotoCapture from "./PhotoCapture/PhotoCapture";
 import VoiceCapture from "./VoiceCapture/VoiceCapture";
 import { formatTimeAgo } from "../../../utils/formatTimeAgo";
 import Audio from "./Audio/Audio";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Divider from "@mui/material/Divider";
 
 const Chat = props => {
     const [open, setOpen] = useState(false);
@@ -24,6 +27,16 @@ const Chat = props => {
     const { currentUser } = useUserStore();
     const endRef = useRef(null);
     const publicUrl = import.meta.env.VITE_PUBLIC_URL;
+
+    const [moreAnchorEl, setMoreAnchorEl] = React.useState(null);
+    const moreOpen = Boolean(moreAnchorEl);
+
+    const handleClick = event => {
+        setMoreAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setMoreAnchorEl(null);
+    };
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -44,14 +57,6 @@ const Chat = props => {
             handleSend();
         }
     }, [img]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setChat(prev => ({ ...prev }));
-        }, 60000);
-
-        return () => clearInterval(interval);
-    }, []);
 
     const handleEmojiClick = e => {
         setText(prev => prev + e.emoji);
@@ -211,14 +216,43 @@ const Chat = props => {
                     </div>
                 )}
                 <div ref={endRef}></div>
+
+                {chat?.messages.length === 0 && <div className="no-messages-info">Enter you first message!</div>}
             </div>
 
             <div className="bottom" disabled={isCurrentUserBlocked || isReceiverBlocked}>
                 <div className="icons">
-                    <label htmlFor="file">
-                        <img src={`${publicUrl}/img.png`} alt="" />
-                    </label>
-                    <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
+                    <img src={`${publicUrl}/more.svg`} alt="" onClick={handleClick} />
+
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={moreAnchorEl}
+                        open={moreOpen}
+                        onClose={handleClose}
+                        MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                        }}
+                    >
+                        <MenuItem
+                            onClick={() => {
+                                handleClose();
+                            }}
+                        >
+                            <label htmlFor="file">
+                                <img src={`${publicUrl}/img.png`} alt="" />
+                            </label>
+                            <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem
+                            onClick={() => {
+                                handleClose();
+                            }}
+                        >
+                            Logout
+                        </MenuItem>
+                    </Menu>
+
                     <PhotoCapture handlePhoto={handleImg} />
                     <VoiceCapture handleAudio={handleAudio} />
                 </div>

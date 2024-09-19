@@ -8,7 +8,7 @@ import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
 
 const UserInfo = () => {
-    const { currentUser } = useUserStore();
+    const { currentUser, fetchUserInfo } = useUserStore();
     const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
     const [moreAnchorEl, setMoreAnchorEl] = React.useState(null);
@@ -20,6 +20,12 @@ const UserInfo = () => {
     };
     const handleClose = () => {
         setMoreAnchorEl(null);
+    };
+
+    const logout = async () => {
+        handleClose();
+        auth.signOut();
+        fetchUserInfo();
     };
 
     return (
@@ -48,14 +54,7 @@ const UserInfo = () => {
                         Profile
                     </MenuItem>
                     <Divider />
-                    <MenuItem
-                        onClick={() => {
-                            handleClose();
-                            auth.signOut();
-                        }}
-                    >
-                        Logout
-                    </MenuItem>
+                    <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>
             </div>
         </div>

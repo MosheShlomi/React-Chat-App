@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./addUser.scss";
 import { toast } from "react-toastify";
 import { arrayUnion, collection, doc, getDocs, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
@@ -11,6 +11,12 @@ const AddUser = () => {
     const [searchText, setSearchText] = useState("");
     const [searchPerformed, setSearchPerformed] = useState(false);
     const [loadingUsers, setLoadingUsers] = useState({});
+
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     const handleSearch = async e => {
         e.preventDefault();
@@ -104,6 +110,7 @@ const AddUser = () => {
                     placeholder="Username"
                     value={searchText}
                     onChange={e => setSearchText(e.target.value)}
+                    ref={inputRef}
                 />
 
                 <button>Search</button>
