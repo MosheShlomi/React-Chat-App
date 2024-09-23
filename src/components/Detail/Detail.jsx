@@ -26,7 +26,6 @@ const Detail = () => {
             const chatDoc = await getDoc(doc(db, "chats", chatId));
             if (chatDoc.exists()) {
                 const data = chatDoc.data();
-                console.log(data);
 
                 const sharedPhotos = data.messages.filter(message => message.img).map(message => message.img);
                 const sharedFiles = data.messages
