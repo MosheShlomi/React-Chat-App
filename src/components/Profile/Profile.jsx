@@ -5,7 +5,7 @@ import { useUserStore } from "../../lib/userStore";
 import { doc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "./profile.scss";
-import upload from "../../lib/upload";
+import { imageUpload } from "../../lib/upload";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
@@ -42,7 +42,7 @@ const Profile = () => {
             let avatarUrl = currentUser.avatar;
 
             if (avatarFile) {
-                avatarUrl = await upload(avatarFile);
+                avatarUrl = await imageUpload(avatarFile);
             }
 
             await updateDoc(userDocRef, {
@@ -54,7 +54,7 @@ const Profile = () => {
             });
 
             toast.success("Profile updated successfully!");
-            navigate("/");
+            window.location.href = "/";
         } catch (error) {
             console.error("Error updating profile: ", error);
             toast.error("Failed to update profile.");

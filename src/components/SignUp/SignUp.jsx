@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../lib/firebase";
-import upload from "../../lib/upload";
+import { imageUpload } from "../../lib/upload";
 import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ const SignUp = () => {
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
 
-            const imgUrl = avatar.file ? await upload(avatar.file) : null;
+            const imgUrl = avatar.file ? await imageUpload(avatar.file) : null;
 
             await setDoc(doc(db, "users", res.user.uid), {
                 username,
