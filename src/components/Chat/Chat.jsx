@@ -63,7 +63,6 @@ const Chat = props => {
         try {
             if (fileData) {
                 fileUrl = await upload(fileData);
-                console.log(fileData.type);
                 fileType = fileData.type.split("/")[0]; // Checks if it's an image or document
             }
 

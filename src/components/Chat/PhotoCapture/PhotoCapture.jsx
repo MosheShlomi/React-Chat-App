@@ -69,12 +69,7 @@ const PhotoCapture = props => {
 
     const sendPhoto = () => {
         stopCamera();
-        const syntheticEvent = {
-            target: {
-                files: [file],
-            },
-        };
-        props.handlePhoto(syntheticEvent);
+        props.handlePhoto(file);
         setCapturedImage(null);
     };
 
