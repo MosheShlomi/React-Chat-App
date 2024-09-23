@@ -10,33 +10,23 @@ import PhotoCapture from "./PhotoCapture/PhotoCapture";
 import VoiceCapture from "./VoiceCapture/VoiceCapture";
 import { formatTimeAgo } from "../../../utils/formatTimeAgo";
 import Audio from "./Audio/Audio";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Divider from "@mui/material/Divider";
+import FileAttach from "./FileAttach/FileAttach";
 
 const Chat = props => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
     const [chat, setChat] = useState(null);
-    const [img, setImg] = useState({
-        file: null,
-        url: "",
-    });
-
+    const [fileData, setFileData] = useState(null);
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
     const { currentUser } = useUserStore();
     const endRef = useRef(null);
+    const inputRef = useRef(null);
+
     const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
-    const [moreAnchorEl, setMoreAnchorEl] = React.useState(null);
-    const moreOpen = Boolean(moreAnchorEl);
-
-    const handleClick = event => {
-        setMoreAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setMoreAnchorEl(null);
-    };
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,34 +43,28 @@ const Chat = props => {
     }, [chatId]);
 
     useEffect(() => {
-        if (img.file) {
+        if (fileData) {
             handleSend();
         }
-    }, [img]);
+    }, [fileData]);
 
     const handleEmojiClick = e => {
         setText(prev => prev + e.emoji);
         setOpen(false);
-    };
-
-    const handleImg = e => {
-        if (e.target.files[0]) {
-            setImg({
-                file: e.target.files[0],
-                url: URL.createObjectURL(e.target.files[0]),
-            });
-        }
-        endRef.current?.scrollIntoView({ behavior: "smooth" });
+        inputRef.current?.focus();
     };
 
     const handleSend = async () => {
-        if (text === "" && !img.file) return;
+        if (text === "" && !fileData) return;
 
-        let imgUrl = null;
+        let fileUrl = null;
+        let fileType = null;
 
         try {
-            if (img.file) {
-                imgUrl = await upload(img.file);
+            if (fileData) {
+                fileUrl = await upload(fileData);
+                console.log(fileData.type);
+                fileType = fileData.type.split("/")[0]; // Checks if it's an image or document
             }
 
             await updateDoc(doc(db, "chats", chatId), {
@@ -88,22 +72,22 @@ const Chat = props => {
                     senderId: currentUser.id,
                     text,
                     createdAt: new Date(),
-                    ...(imgUrl && { img: imgUrl }),
+                    ...(fileType === "image" && { img: fileUrl }),
+                    ...(fileType === "audio" && { audio: fileUrl }),
+                    ...(fileType === "application" && { file: fileUrl, fileName: fileData.name }),
                 }),
             });
 
             const userIds = [currentUser.id, user.id];
-
             userIds.forEach(async id => {
                 const userChatsRef = doc(db, "userchats", id);
                 const userChatsSnapshot = await getDoc(userChatsRef);
 
                 if (userChatsSnapshot.exists()) {
                     const userChatsData = userChatsSnapshot.data();
-
                     const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
 
-                    userChatsData.chats[chatIndex].lastMessage = text;
+                    userChatsData.chats[chatIndex].lastMessage = fileType ? "Document" : text;
                     userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
                     userChatsData.chats[chatIndex].updatedAt = Date.now();
 
@@ -116,11 +100,7 @@ const Chat = props => {
             console.error(err);
         }
 
-        setImg({
-            file: null,
-            url: "",
-        });
-
+        setFileData(null);
         setText("");
     };
 
@@ -131,44 +111,9 @@ const Chat = props => {
         }
     };
 
-    const handleAudio = async e => {
-        if (!e.target.files[0]) return;
-
-        const audioFile = e.target.files[0];
-        let audioUrl = null;
-
-        try {
-            audioUrl = await upload(audioFile);
-
-            await updateDoc(doc(db, "chats", chatId), {
-                messages: arrayUnion({
-                    senderId: currentUser.id,
-                    audio: audioUrl,
-                    createdAt: new Date(),
-                }),
-            });
-
-            const userIds = [currentUser.id, user.id];
-            userIds.forEach(async id => {
-                const userChatsRef = doc(db, "userchats", id);
-                const userChatsSnapshot = await getDoc(userChatsRef);
-
-                if (userChatsSnapshot.exists()) {
-                    const userChatsData = userChatsSnapshot.data();
-
-                    const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
-
-                    userChatsData.chats[chatIndex].lastMessage = "Audio Message";
-                    userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
-                    userChatsData.chats[chatIndex].updatedAt = Date.now();
-
-                    await updateDoc(userChatsRef, {
-                        chats: userChatsData.chats,
-                    });
-                }
-            });
-        } catch (err) {
-            console.error("Error sending audio message:", err);
+    const handleFile = file => {
+        if (file) {
+            setFileData(file);
         }
     };
 
@@ -205,56 +150,29 @@ const Chat = props => {
                         <div className="texts">
                             {message.img && <img src={message.img} alt="" />}
                             {message.audio && <Audio src={message.audio} />}
+                            {message.file && (
+                                <a href={message.file} target="_blank" rel="noopener noreferrer">
+                                    <div className="file-icon">
+                                        <img id="icon" src={`${publicUrl}/file.svg`} alt="" />
+                                        {message.fileName}
+                                    </div>
+                                </a>
+                            )}
                             {message.text && <p>{message.text}</p>}
                         </div>
                         <span>{formatTimeAgo(message.createdAt)}</span>
                     </div>
                 ))}
-                {img.url && (
-                    <div className="message own">
-                        <img src={img.url} alt="" />
-                    </div>
-                )}
                 <div ref={endRef}></div>
 
-                {chat?.messages.length === 0 && <div className="no-messages-info">Enter you first message!</div>}
+                {chat?.messages.length === 0 && <div className="no-messages-info">Enter your first message!</div>}
             </div>
 
             <div className="bottom" disabled={isCurrentUserBlocked || isReceiverBlocked}>
                 <div className="icons">
-                    <img src={`${publicUrl}/more.svg`} alt="" onClick={handleClick} />
-
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={moreAnchorEl}
-                        open={moreOpen}
-                        onClose={handleClose}
-                        MenuListProps={{
-                            "aria-labelledby": "basic-button",
-                        }}
-                    >
-                        <MenuItem
-                            onClick={() => {
-                                handleClose();
-                            }}
-                        >
-                            <label htmlFor="file">
-                                <img src={`${publicUrl}/img.png`} alt="" />
-                            </label>
-                            <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
-                        </MenuItem>
-                        <Divider />
-                        <MenuItem
-                            onClick={() => {
-                                handleClose();
-                            }}
-                        >
-                            Logout
-                        </MenuItem>
-                    </Menu>
-
-                    <PhotoCapture handlePhoto={handleImg} />
-                    <VoiceCapture handleAudio={handleAudio} />
+                    <FileAttach handleFile={handleFile} />
+                    <PhotoCapture handlePhoto={handleFile} />
+                    <VoiceCapture handleAudio={handleFile} />
                 </div>
                 <div className="input-box">
                     <input
@@ -265,6 +183,7 @@ const Chat = props => {
                                 : "Type a message..."
                         }
                         value={text}
+                        ref={inputRef}
                         onChange={e => setText(e.target.value)}
                         onKeyDown={handleEnter}
                         disabled={isCurrentUserBlocked || isReceiverBlocked}

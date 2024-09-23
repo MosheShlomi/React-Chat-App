@@ -74,12 +74,7 @@ const VoiceCapture = props => {
     const sendAudio = () => {
         stopRecording();
         setVoiceMode(false);
-        const syntheticEvent = {
-            target: {
-                files: [file],
-            },
-        };
-        props.handleAudio(syntheticEvent);
+        props.handleAudio(file);
         setAudioURL(null);
     };
 
