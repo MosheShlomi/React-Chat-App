@@ -69,18 +69,19 @@ const PhotoCapture = props => {
 
     const sendPhoto = () => {
         stopCamera();
-        const syntheticEvent = {
-            target: {
-                files: [file],
-            },
-        };
-        props.handlePhoto(syntheticEvent);
+        props.handlePhoto(file);
         setCapturedImage(null);
     };
 
     return (
         <>
-            <Dialog onClose={() => setPhotoMode(prev => !prev)} open={photoMode}>
+            <Dialog
+                onClose={() => {
+                    setPhotoMode(prev => !prev);
+                    stopCamera();
+                }}
+                open={photoMode}
+            >
                 <div className="video-window" style={{ display: showCamera ? "flex" : "none" }}>
                     <video ref={videoRef} />
                     <img src={`${publicUrl}/photo-capture.svg`} className="action-icon" alt="" onClick={capturePhoto} />

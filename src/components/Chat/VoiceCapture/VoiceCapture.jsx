@@ -74,12 +74,7 @@ const VoiceCapture = props => {
     const sendAudio = () => {
         stopRecording();
         setVoiceMode(false);
-        const syntheticEvent = {
-            target: {
-                files: [file],
-            },
-        };
-        props.handleAudio(syntheticEvent);
+        props.handleAudio(file);
         setAudioURL(null);
     };
 
@@ -94,7 +89,13 @@ const VoiceCapture = props => {
 
     return (
         <>
-            <Dialog onClose={() => setVoiceMode(prev => !prev)} open={voiceMode}>
+            <Dialog
+                onClose={() => {
+                    stopRecording();
+                    setVoiceMode(prev => !prev);
+                }}
+                open={voiceMode}
+            >
                 <div className="audio-window" style={{ display: isRecording ? "block" : "none" }}>
                     <button id="speech" className="btn" onClick={stopRecording}>
                         <div className="pulse-ring"></div>

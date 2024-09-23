@@ -35,7 +35,9 @@ const AddUser = () => {
             const allUsers = querySnapShot.docs.map(doc => doc.data());
 
             // Filter users whose usernames contain the searchText
-            const filteredUsers = allUsers.filter(user => user.username.toLowerCase().includes(trimmedSearchText));
+            const filteredUsers = allUsers.filter(user => {
+                return user.username.toLowerCase().includes(trimmedSearchText) && user.id !== currentUser.id;
+            });
 
             const userChatsRef = doc(db, "userchats", currentUser.id);
             const userChatsSnapShot = await getDoc(userChatsRef);

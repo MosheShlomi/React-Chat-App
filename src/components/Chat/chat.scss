@@ -122,6 +122,19 @@
                         color: $audio-bg !important;
                     }
                 }
+
+                .file-icon {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    color: white;
+
+                    #icon {
+                        width: 40px;
+                        height: 40px;
+                    }
+                }
             }
 
             span {
