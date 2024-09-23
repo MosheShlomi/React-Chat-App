@@ -26,12 +26,16 @@ const Detail = () => {
             const chatDoc = await getDoc(doc(db, "chats", chatId));
             if (chatDoc.exists()) {
                 const data = chatDoc.data();
-                console.log(data);
 
                 const sharedPhotos = data.messages.filter(message => message.img).map(message => message.img);
+                const sharedFiles = data.messages
+                    .filter(message => message.file)
+                    .map(message => {
+                        return { name: message.fileName, url: message.file };
+                    });
 
                 setSharedPhotos(sharedPhotos);
-                setSharedFiles(data.sharedFiles || []);
+                setSharedFiles(sharedFiles);
             } else {
                 setSharedPhotos([]);
                 setSharedFiles([]);
@@ -43,8 +47,7 @@ const Detail = () => {
     };
 
     useEffect(() => {
-        if (chatId && expanded === "panel2") {
-            // Check if the correct accordion is expanded
+        if (chatId && (expanded === "panel2" || expanded === "panel3")) {
             fetchSharedData();
         }
     }, [chatId, expanded]);
@@ -214,10 +217,17 @@ const Detail = () => {
                     <AccordionDetails>
                         <div className="files">
                             {sharedFiles.map((file, index) => (
-                                <div className="fileItem" key={index}>
-                                    <Typography>{file.name}</Typography>
-                                    <Button variant="outlined" href={file.url} download>
-                                        Download
+                                <div className="file-item" key={index}>
+                                    <Button
+                                        variant="outlined"
+                                        href={file.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <div className="file-icon">
+                                            <img id="icon" src={`${publicUrl}/file.svg`} alt="" />
+                                            <Typography>{file.name}</Typography>
+                                        </div>
                                     </Button>
                                 </div>
                             ))}

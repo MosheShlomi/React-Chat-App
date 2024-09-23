@@ -73,6 +73,29 @@
             }
         }
 
+        .files {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .file-item {
+                a {
+                    width: 100%;
+                }
+
+                .file-icon {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    justify-content: center;
+
+                    img {
+                        padding-right: 10px;
+                    }
+                }
+            }
+        }
+
         .privacy-help-content {
             a {
                 text-decoration: none;
