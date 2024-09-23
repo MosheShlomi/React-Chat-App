@@ -23,10 +23,12 @@ const FileAttach = ({ handleFile }) => {
     };
 
     const handleFileClick = () => {
+        handleClose();
         fileInputRef.current.click();
     };
 
     const handleImageClick = () => {
+        handleClose();
         imageInputRef.current.click();
     };
 

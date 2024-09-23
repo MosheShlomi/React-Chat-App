@@ -1,11 +1,25 @@
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "./firebase";
 import { toast } from "react-toastify";
 
-const upload = async file => {
+export const imageUpload = async file => {
     const date = new Date();
     const storageRef = ref(storage, `images/${date + file.name}`);
+    return upload(storageRef, file);
+};
 
+export const fileUpload = async file => {
+    const storageRef = ref(storage, `files/${file.name}`);
+    return upload(storageRef, file);
+};
+
+export const audioUpload = async file => {
+    const date = new Date();
+    const storageRef = ref(storage, `audio/${date + file.name}`);
+    return upload(storageRef, file);
+};
+
+const upload = async (storageRef, file) => {
     const uploadTask = uploadBytesResumable(storageRef, file);
     let toastId = null;
 
@@ -35,5 +49,3 @@ const upload = async file => {
         );
     });
 };
-
-export default upload;

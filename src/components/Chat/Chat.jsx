@@ -5,7 +5,7 @@ import { db } from "../../lib/firebase";
 import "./chat.scss";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
-import upload from "../../lib/upload";
+import { imageUpload, fileUpload, audioUpload } from "../../lib/upload";
 import PhotoCapture from "./PhotoCapture/PhotoCapture";
 import VoiceCapture from "./VoiceCapture/VoiceCapture";
 import { formatTimeAgo } from "../../../utils/formatTimeAgo";
@@ -62,8 +62,15 @@ const Chat = props => {
 
         try {
             if (fileData) {
-                fileUrl = await upload(fileData);
-                fileType = fileData.type.split("/")[0]; // Checks if it's an image or document
+                fileType = fileData.type.split("/")[0]; // Checks if it's an image, document or audio
+                console.log(fileType);
+                if (fileType === "image") {
+                    fileUrl = await imageUpload(fileData);
+                } else if (fileType === "application") {
+                    fileUrl = await fileUpload(fileData);
+                } else if (fileType === "audio") {
+                    fileUrl = await audioUpload(fileData);
+                }
             }
 
             await updateDoc(doc(db, "chats", chatId), {
