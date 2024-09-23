@@ -89,7 +89,13 @@ const VoiceCapture = props => {
 
     return (
         <>
-            <Dialog onClose={() => setVoiceMode(prev => !prev)} open={voiceMode}>
+            <Dialog
+                onClose={() => {
+                    stopRecording();
+                    setVoiceMode(prev => !prev);
+                }}
+                open={voiceMode}
+            >
                 <div className="audio-window" style={{ display: isRecording ? "block" : "none" }}>
                     <button id="speech" className="btn" onClick={stopRecording}>
                         <div className="pulse-ring"></div>
