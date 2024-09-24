@@ -16,6 +16,11 @@ const AddUser = () => {
 
     useEffect(() => {
         inputRef.current?.focus();
+
+        async function fetchData() {
+            await getUsers();
+        }
+        fetchData();
     }, []);
 
     const handleSearch = async e => {
@@ -23,21 +28,26 @@ const AddUser = () => {
 
         const trimmedSearchText = searchText.trim().toLowerCase();
 
-        if (!trimmedSearchText) {
-            toast.error("Please enter a username.");
-            return;
-        }
+        await getUsers(trimmedSearchText || null);
+    };
 
+    const getUsers = async (searchText = null) => {
         try {
             const userRef = collection(db, "users");
             const querySnapShot = await getDocs(userRef);
 
             const allUsers = querySnapShot.docs.map(doc => doc.data());
 
-            // Filter users whose usernames contain the searchText
-            const filteredUsers = allUsers.filter(user => {
-                return user.username.toLowerCase().includes(trimmedSearchText) && user.id !== currentUser.id;
+            let filteredUsers = allUsers.filter(user => {
+                return user.id !== currentUser.id;
             });
+
+            // Filter users whose usernames contain the searchText
+            if (searchText) {
+                filteredUsers = filteredUsers.filter(user => {
+                    return user.username.toLowerCase().includes(searchText);
+                });
+            }
 
             const userChatsRef = doc(db, "userchats", currentUser.id);
             const userChatsSnapShot = await getDoc(userChatsRef);

@@ -31,7 +31,7 @@ const UserInfo = () => {
     return (
         <div className="userInfo">
             <div className="user">
-                <img src={currentUser.avatar || `${publicUrl}/avatar.png`} alt="" />
+                <img src={currentUser.avatar || `${publicUrl}/avatar.png`} alt="" onClick={handleClick} />
                 <h2>{currentUser.username}</h2>
             </div>
             <div className="icons">

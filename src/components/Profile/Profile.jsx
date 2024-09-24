@@ -17,6 +17,7 @@ const Profile = () => {
     const [avatar, setAvatar] = useState(currentUser?.avatar || "");
     const [avatarFile, setAvatarFile] = useState(null);
     const navigate = useNavigate();
+    const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
     useEffect(() => {
         setUsername(currentUser?.username || "");
@@ -55,7 +56,7 @@ const Profile = () => {
             });
 
             toast.success("Profile updated successfully!");
-            window.location.href = "/";
+            window.location.href = publicUrl;
         } catch (error) {
             console.error("Error updating profile: ", error);
             toast.error("Failed to update profile.");
