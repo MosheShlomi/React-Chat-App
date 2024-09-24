@@ -52,6 +52,11 @@
             }
         }
 
+        .MuiAccordionDetails-root {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
         .photos {
             display: flex;
             align-items: center;
@@ -97,13 +102,19 @@
         }
 
         .privacy-help-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
             a {
                 text-decoration: none;
                 color: #bbff0f;
             }
 
-            li:not(:last-of-type) {
-                margin-bottom: 10px;
+            button {
+                width: 100%;
             }
 
             .MuiButtonBase-root:disabled {

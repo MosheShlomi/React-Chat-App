@@ -1,6 +1,9 @@
 @import "../../scss/utils/variables";
 
 .profile-container {
+    .back-home-btn {
+        width: 100%;
+    }
     .profile-title {
         text-align: center;
         margin-bottom: 20px;

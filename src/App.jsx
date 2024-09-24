@@ -13,11 +13,14 @@ import SignUp from "./components/SignUp/SignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import CircularProgress from "@mui/material/CircularProgress";
 import Profile from "./components/Profile/Profile";
+import { BrowserRouter } from "react-router-dom";
 
 const App = () => {
     const { currentUser, isLoading, fetchUserInfo } = useUserStore();
     const { chatId } = useChatStore();
     const [showDetails, setShowDetails] = useState(false);
+    const basename = import.meta.env.MODE === "production" ? "/React-Chat-App" : "/";
+    console.log(import.meta.env.MODE);
 
     useEffect(() => {
         const unSub = onAuthStateChanged(auth, user => {
@@ -47,7 +50,7 @@ const App = () => {
     }
 
     return (
-        <Router>
+        <BrowserRouter basename={basename}>
             <Routes>
                 <Route path="/login" element={currentUser ? <Navigate to="/" /> : <Login />} />
                 <Route path="/sign-up" element={currentUser ? <Navigate to="/" /> : <SignUp />} />
@@ -75,7 +78,7 @@ const App = () => {
                 />
             </Routes>
             <Notification />
-        </Router>
+        </BrowserRouter>
     );
 };
 

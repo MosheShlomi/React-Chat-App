@@ -77,7 +77,7 @@ const SignUp = () => {
                         <img src={avatar.url ? avatar.url : `${import.meta.env.VITE_PUBLIC_URL}/avatar.png`} alt="" />
                         Upload an image
                     </label>
-                    <input type="file" id="file" style={{ display: "none" }} onChange={handleAvatar} />
+                    <input type="file" accept="image/*" id="file" style={{ display: "none" }} onChange={handleAvatar} />
                     <TextField
                         label="Username"
                         value={username}

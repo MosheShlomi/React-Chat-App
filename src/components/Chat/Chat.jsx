@@ -67,6 +67,7 @@ const Chat = props => {
     };
 
     const handleSend = async () => {
+        debugger;
         if (text === "" && !fileData) return;
 
         let fileUrl = null;

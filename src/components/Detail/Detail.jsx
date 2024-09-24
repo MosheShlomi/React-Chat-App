@@ -159,33 +159,27 @@ const Detail = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                         <div className="privacy-help-content">
-                            <ul>
-                                <li>
-                                    <ConfirmationDialog
-                                        text="Are you sure to delete this chat?"
-                                        btnText="Delete the chat"
-                                        onConfirm={handleDeleteChat}
-                                    />
-                                </li>
-                                <li>
-                                    <ConfirmationDialog
-                                        text={
-                                            isReceiverBlocked
-                                                ? "Are you sure to unblock the user?"
-                                                : "Are you sure to block the user?"
-                                        }
-                                        btnText={
-                                            isCurrentUserBlocked
-                                                ? "You are blocked!"
-                                                : isReceiverBlocked
-                                                  ? "You blocked this user! Click again to unblock."
-                                                  : "Block the user"
-                                        }
-                                        onConfirm={handleBlock}
-                                        disabled={isCurrentUserBlocked}
-                                    />
-                                </li>
-                            </ul>
+                            <ConfirmationDialog
+                                text="Are you sure to delete this chat?"
+                                btnText="Delete the chat"
+                                onConfirm={handleDeleteChat}
+                            />
+                            <ConfirmationDialog
+                                text={
+                                    isReceiverBlocked
+                                        ? "Are you sure to unblock the user?"
+                                        : "Are you sure to block the user?"
+                                }
+                                btnText={
+                                    isCurrentUserBlocked
+                                        ? "You are blocked!"
+                                        : isReceiverBlocked
+                                          ? "You blocked this user! Click again to unblock."
+                                          : "Block the user"
+                                }
+                                onConfirm={handleBlock}
+                                disabled={isCurrentUserBlocked}
+                            />
                         </div>
                     </AccordionDetails>
                 </Accordion>
