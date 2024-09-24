@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "./profile.scss";
 import { imageUpload } from "../../lib/upload";
 import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const Profile = () => {
     const { currentUser } = useUserStore();
@@ -63,6 +64,11 @@ const Profile = () => {
 
     return (
         <Container maxWidth="sm" className="profile-container">
+            <div className="back-home-btn">
+                <Button variant="outlined" onClick={() => navigate("/")}>
+                    <ArrowBackIcon />
+                </Button>
+            </div>
             <Typography variant="h6" className="profile-title">
                 Edit Profile
             </Typography>
