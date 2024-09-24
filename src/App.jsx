@@ -20,7 +20,6 @@ const App = () => {
     const { chatId } = useChatStore();
     const [showDetails, setShowDetails] = useState(false);
     const basename = import.meta.env.MODE === "production" ? "/React-Chat-App" : "/";
-    console.log(import.meta.env.MODE);
 
     useEffect(() => {
         const unSub = onAuthStateChanged(auth, user => {
