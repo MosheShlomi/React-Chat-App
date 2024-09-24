@@ -11,6 +11,7 @@ import VoiceCapture from "./VoiceCapture/VoiceCapture";
 import { formatTimeAgo } from "../../../utils/formatTimeAgo";
 import Audio from "./Audio/Audio";
 import FileAttach from "./FileAttach/FileAttach";
+import { toast } from "react-toastify";
 
 const Chat = props => {
     const [open, setOpen] = useState(false);
@@ -52,6 +53,10 @@ const Chat = props => {
         setText(prev => prev + e.emoji);
         setOpen(false);
         inputRef.current?.focus();
+    };
+
+    const showToastV2 = () => {
+        toast.info("This functionallity will be able in V2!");
     };
 
     const handleSend = async () => {
@@ -142,8 +147,8 @@ const Chat = props => {
                 </div>
 
                 <div className="icons">
-                    <img src={`${publicUrl}/phone.png`} alt="" />
-                    <img src={`${publicUrl}/video.png`} alt="" />
+                    <img src={`${publicUrl}/phone.png`} alt="" onClick={showToastV2} />
+                    <img src={`${publicUrl}/video.png`} alt="" onClick={showToastV2} />
                     <img src={`${publicUrl}/info.png`} alt="" onClick={props.handleOpenDetails} />
                 </div>
             </div>
