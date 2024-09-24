@@ -13,8 +13,15 @@ import Audio from "./Audio/Audio";
 import FileAttach from "./FileAttach/FileAttach";
 import { toast } from "react-toastify";
 
+const values = {
+    image: "Image",
+    application: "File",
+    audio: "Audio Message",
+};
+
 const Chat = props => {
     const [open, setOpen] = useState(false);
+    const [messageSending, setMessageSending] = useState(false);
     const [text, setText] = useState("");
     const [chat, setChat] = useState(null);
     const [fileData, setFileData] = useState(null);
@@ -68,13 +75,17 @@ const Chat = props => {
         try {
             if (fileData) {
                 fileType = fileData.type.split("/")[0]; // Checks if it's an image, document or audio
-
-                if (fileType === "image") {
-                    fileUrl = await imageUpload(fileData);
-                } else if (fileType === "application") {
-                    fileUrl = await fileUpload(fileData);
-                } else if (fileType === "audio") {
-                    fileUrl = await audioUpload(fileData);
+                setMessageSending(true);
+                switch (fileType) {
+                    case "image":
+                        fileUrl = await imageUpload(fileData);
+                        break;
+                    case "application":
+                        fileUrl = await fileUpload(fileData);
+                        break;
+                    case "audio":
+                        fileUrl = await audioUpload(fileData);
+                        break;
                 }
             }
 
@@ -98,7 +109,7 @@ const Chat = props => {
                     const userChatsData = userChatsSnapshot.data();
                     const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
 
-                    userChatsData.chats[chatIndex].lastMessage = fileType ? "Document" : text;
+                    userChatsData.chats[chatIndex].lastMessage = fileType ? values[fileType] : text;
                     userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
                     userChatsData.chats[chatIndex].updatedAt = Date.now();
 
@@ -107,6 +118,7 @@ const Chat = props => {
                     });
                 }
             });
+            setMessageSending(false);
         } catch (err) {
             console.error(err);
         }
@@ -179,7 +191,7 @@ const Chat = props => {
                 {chat?.messages.length === 0 && <div className="no-messages-info">Enter your first message!</div>}
             </div>
 
-            <div className="bottom" disabled={isCurrentUserBlocked || isReceiverBlocked}>
+            <div className="bottom" disabled={messageSending || isCurrentUserBlocked || isReceiverBlocked}>
                 <div className="icons">
                     <FileAttach handleFile={handleFile} />
                     <PhotoCapture handlePhoto={handleFile} />
