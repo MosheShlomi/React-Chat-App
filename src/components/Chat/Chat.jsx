@@ -151,6 +151,7 @@ const Chat = props => {
                                 : `${publicUrl}/avatar.png`
                         }
                         alt=""
+                        onClick={props.handleOpenDetails}
                     />
                     <div className="texts">
                         <span>{user?.username}</span>
