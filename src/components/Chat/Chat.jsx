@@ -13,6 +13,9 @@ import Audio from "./Audio/Audio";
 import FileAttach from "./FileAttach/FileAttach";
 import { toast } from "react-toastify";
 import Dialog from "@mui/material/Dialog";
+import useScreenStore from "../../lib/screenStore";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { Button } from "@mui/material";
 
 const values = {
     image: "Image",
@@ -29,6 +32,7 @@ const Chat = props => {
     const [chat, setChat] = useState(null);
     const [fileData, setFileData] = useState(null);
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
+    const { isMobile, setActiveSection } = useScreenStore();
     const { currentUser } = useUserStore();
     const endRef = useRef(null);
     const inputRef = useRef(null);
@@ -153,10 +157,21 @@ const Chat = props => {
         setImgDialogOpen(false);
     };
 
+    const handleBackButton = () => {
+        setActiveSection("list");
+    };
+
     return (
         <div className="chat">
             <div className="top">
                 <div className="user">
+                    {isMobile && (
+                        <div className="back-home-btn">
+                            <Button variant="outlined" onClick={handleBackButton}>
+                                <ArrowBackIosIcon />
+                            </Button>
+                        </div>
+                    )}
                     <img
                         src={
                             user.avatar && !isCurrentUserBlocked && !isReceiverBlocked
@@ -179,10 +194,10 @@ const Chat = props => {
                 </div>
             </div>
             <div className="center">
-                {chat?.messages?.map(message => (
+                {chat?.messages?.map((message, index) => (
                     <div
                         className={`message ${message.senderId === currentUser?.id ? "own" : ""}`}
-                        key={message?.createdAt?.seconds}
+                        key={message?.createdAt?.toMillis?.() || index}
                     >
                         <div className="texts">
                             {message.img && <img src={message.img} alt="" onClick={() => openImgDialog(message.img)} />}
@@ -225,12 +240,18 @@ const Chat = props => {
                         onKeyDown={handleEnter}
                         disabled={isCurrentUserBlocked || isReceiverBlocked}
                     />
-                    <div className="emoji">
-                        <img src={`${publicUrl}/emoji.png`} alt="" onClick={() => setEmojiPickerOpen(prev => !prev)} />
-                        <div className="picker">
-                            <EmojiPicker open={emojiPickerOpen} onEmojiClick={handleEmojiClick} />
+                    {!isMobile && (
+                        <div className="emoji">
+                            <img
+                                src={`${publicUrl}/emoji.png`}
+                                alt=""
+                                onClick={() => setEmojiPickerOpen(prev => !prev)}
+                            />
+                            <div className="picker">
+                                <EmojiPicker open={emojiPickerOpen} onEmojiClick={handleEmojiClick} />
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 <button
                     className="sendButton"

@@ -6,6 +6,7 @@ import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { useChatStore } from "../../../lib/chatStore";
 import Dialog from "@mui/material/Dialog";
+import useScreenStore from "../../../lib/screenStore";
 
 const ChatList = () => {
     const [addMode, setAddMode] = useState(false);
@@ -14,7 +15,8 @@ const ChatList = () => {
     const [chatsLoaded, setChatsLoaded] = useState(false);
 
     const { currentUser } = useUserStore();
-    const { chatId, changeChat } = useChatStore();
+    const { changeChat } = useChatStore();
+    const { setActiveSection } = useScreenStore();
     const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
     useEffect(() => {
@@ -59,6 +61,7 @@ const ChatList = () => {
                 chats: userChats,
             });
             changeChat(chat.chatId, chat.user);
+            setActiveSection("chat");
         } catch (err) {
             console.error(err);
         }

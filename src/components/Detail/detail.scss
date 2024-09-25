@@ -15,6 +15,10 @@
         border: 1px solid $section-divider;
         flex: 0 0 auto;
 
+        .back-home-btn {
+            align-self: start;
+        }
+
         img {
             width: 100px;
             height: 100px;
