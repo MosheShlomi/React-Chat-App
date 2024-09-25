@@ -23,7 +23,7 @@
         }
 
         p {
-            font-size: 14px;
+            font-size: 0.7rem;
             font-weight: 300;
             color: #a5a5a5;
         }
@@ -50,6 +50,10 @@
                 border-top: 1px solid white;
                 padding: 16px;
             }
+        }
+
+        .MuiTypography-root {
+            font-size: 0.8rem;
         }
 
         .MuiAccordionDetails-root {
@@ -115,6 +119,7 @@
 
             button {
                 width: 100%;
+                font-size: 0.7rem;
             }
 
             .MuiButtonBase-root:disabled {
