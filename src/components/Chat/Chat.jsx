@@ -12,6 +12,7 @@ import { formatTimeAgo } from "../../../utils/formatTimeAgo";
 import Audio from "./Audio/Audio";
 import FileAttach from "./FileAttach/FileAttach";
 import { toast } from "react-toastify";
+import Dialog from "@mui/material/Dialog";
 
 const values = {
     image: "Image",
@@ -20,8 +21,10 @@ const values = {
 };
 
 const Chat = props => {
-    const [open, setOpen] = useState(false);
+    const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+    const [imgDialogOpen, setImgDialogOpen] = useState(false);
     const [messageSending, setMessageSending] = useState(false);
+    const [dialogImg, setDialogImg] = useState(null);
     const [text, setText] = useState("");
     const [chat, setChat] = useState(null);
     const [fileData, setFileData] = useState(null);
@@ -58,7 +61,7 @@ const Chat = props => {
 
     const handleEmojiClick = e => {
         setText(prev => prev + e.emoji);
-        setOpen(false);
+        setEmojiPickerOpen(false);
         inputRef.current?.focus();
     };
 
@@ -140,6 +143,16 @@ const Chat = props => {
         }
     };
 
+    const openImgDialog = img => {
+        setDialogImg(img);
+        setImgDialogOpen(true);
+    };
+
+    const closeImgDialog = () => {
+        setDialogImg(null);
+        setImgDialogOpen(false);
+    };
+
     return (
         <div className="chat">
             <div className="top">
@@ -172,7 +185,7 @@ const Chat = props => {
                         key={message?.createdAt?.seconds}
                     >
                         <div className="texts">
-                            {message.img && <img src={message.img} alt="" />}
+                            {message.img && <img src={message.img} alt="" onClick={() => openImgDialog(message.img)} />}
                             {message.audio && <Audio src={message.audio} />}
                             {message.file && (
                                 <a href={message.file} target="_blank" rel="noopener noreferrer">
@@ -213,9 +226,9 @@ const Chat = props => {
                         disabled={isCurrentUserBlocked || isReceiverBlocked}
                     />
                     <div className="emoji">
-                        <img src={`${publicUrl}/emoji.png`} alt="" onClick={() => setOpen(prev => !prev)} />
+                        <img src={`${publicUrl}/emoji.png`} alt="" onClick={() => setEmojiPickerOpen(prev => !prev)} />
                         <div className="picker">
-                            <EmojiPicker open={open} onEmojiClick={handleEmojiClick} />
+                            <EmojiPicker open={emojiPickerOpen} onEmojiClick={handleEmojiClick} />
                         </div>
                     </div>
                 </div>
@@ -227,6 +240,26 @@ const Chat = props => {
                     Send
                 </button>
             </div>
+            <Dialog
+                open={imgDialogOpen}
+                onClose={closeImgDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth="xl"
+            >
+                <img src={dialogImg} alt="" />
+                {/* <div className="confirmation-dialog">
+                    <DialogTitle id="alert-dialog-title">{props.text}</DialogTitle>
+                    <DialogContent id="alert-dialog-content">
+                        <Button onClick={handleClose} variant="outlined" color="error">
+                            No
+                        </Button>
+                        <Button onClick={handleConfirm} autoFocus variant="outlined" color="success">
+                            Yes
+                        </Button>
+                    </DialogContent>
+                </div> */}
+            </Dialog>
         </div>
     );
 };
