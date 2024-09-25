@@ -3,7 +3,7 @@ import "./signup.scss";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../lib/firebase";
+import { auth, db, getErrorText } from "../../lib/firebase";
 import { imageUpload } from "../../lib/upload";
 import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
@@ -62,7 +62,7 @@ const SignUp = () => {
             navigate("/");
         } catch (err) {
             console.log("Registration error:", err);
-            toast.error(err.message);
+            toast.error(getErrorText(err.code));
         } finally {
             setLoading(false);
         }

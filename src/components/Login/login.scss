@@ -8,6 +8,10 @@
         align-items: center;
         gap: 20px;
 
+        h2 {
+            text-align: center;
+        }
+
         form {
             display: flex;
             flex-direction: column;
@@ -68,10 +72,11 @@
                 width: 100%;
                 text-align: center;
                 color: white;
-                font-size: 14px;
+                font-size: 0.8rem;
                 font-weight: 500;
 
                 a {
+                    text-wrap: nowrap;
                     color: #4070f4;
                     text-decoration: none;
                 }

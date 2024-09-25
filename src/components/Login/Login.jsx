@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./login.scss";
 import { toast } from "react-toastify";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../lib/firebase";
+import { auth, getErrorText } from "../../lib/firebase";
 import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { useUserStore } from "../../lib/userStore";
@@ -24,7 +24,7 @@ const Login = () => {
             toast.success("You signed in successfully!");
         } catch (err) {
             console.log(err);
-            toast.error(err.message);
+            toast.error(getErrorText(err.code));
         } finally {
             setLoading(false);
         }

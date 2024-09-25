@@ -32,7 +32,7 @@ const UserInfo = () => {
         <div className="userInfo">
             <div className="user">
                 <img src={currentUser.avatar || `${publicUrl}/avatar.png`} alt="" onClick={handleClick} />
-                <h2>{currentUser.username}</h2>
+                <h4>{currentUser.username}</h4>
             </div>
             <div className="icons">
                 <img src={`${publicUrl}/more.png`} alt="" onClick={handleClick} />

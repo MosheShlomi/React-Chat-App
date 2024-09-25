@@ -8,6 +8,10 @@
         sans-serif;
 }
 
+html {
+    font-size: 16px;
+}
+
 body {
     background-image: url("/bg.jpg");
     display: flex;
@@ -15,12 +19,18 @@ body {
     align-items: center;
     height: 100%;
     color: white;
-    margin-top: 5vh;
+    width: 100vw;
+    height: 100vh;
     overflow-x: hidden;
-    font-size: 12px;
     zoom: 1;
 
     // cursor: url('image-path.png'), auto; need to change to leaf image of cursor
+
+    #root {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 .container {
@@ -47,7 +57,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 30px;
-    font-size: 20px;
+    font-size: 1rem;
     border-radius: 10px;
     background-color: $popup-bg;
 
@@ -69,10 +79,6 @@ body {
     backdrop-filter: blur(19px) saturate(180%);
     border-radius: 12px;
     border: 1px solid $container-border-color;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     min-width: 450px;
     min-height: 450px;
 }
@@ -93,13 +99,9 @@ body {
 }
 
 @media screen and (max-width: 1400px) {
-    body {
-        margin-bottom: 5vh;
-    }
-
     .container {
         flex-direction: column;
-        height: 100%;
+        width: 90vw;
 
         .login {
             flex-direction: column;
@@ -143,10 +145,8 @@ body {
     }
 
     .login-container {
-        width: 80%;
-        height: auto;
         min-width: auto;
-        min-height: auto;
+        margin: 5px;
     }
 }
 

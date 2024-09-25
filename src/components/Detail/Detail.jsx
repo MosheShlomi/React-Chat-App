@@ -149,7 +149,7 @@ const Detail = () => {
                     }
                     alt=""
                 />
-                <h2>{user?.username}</h2>
+                <h4>{user?.username}</h4>
                 <p>{user?.slogan || "Here should be status phrase of the user!"}</p>
             </div>
             <div className="info">
