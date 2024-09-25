@@ -248,17 +248,6 @@ const Chat = props => {
                 maxWidth="xl"
             >
                 <img src={dialogImg} alt="" />
-                {/* <div className="confirmation-dialog">
-                    <DialogTitle id="alert-dialog-title">{props.text}</DialogTitle>
-                    <DialogContent id="alert-dialog-content">
-                        <Button onClick={handleClose} variant="outlined" color="error">
-                            No
-                        </Button>
-                        <Button onClick={handleConfirm} autoFocus variant="outlined" color="success">
-                            Yes
-                        </Button>
-                    </DialogContent>
-                </div> */}
             </Dialog>
         </div>
     );
