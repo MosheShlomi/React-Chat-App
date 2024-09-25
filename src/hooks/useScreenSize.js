@@ -8,10 +8,6 @@ const useScreenSize = () => {
         const handleResize = () => {
             const isMobile = window.innerWidth <= 800;
             setIsMobile(isMobile);
-
-            if (isMobile) {
-                setActiveSection("list");
-            }
         };
 
         handleResize();
