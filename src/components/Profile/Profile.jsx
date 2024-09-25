@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import "./profile.scss";
 import { imageUpload } from "../../lib/upload";
 import { useNavigate } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const Profile = () => {
     const { currentUser } = useUserStore();
@@ -56,7 +56,7 @@ const Profile = () => {
             });
 
             toast.success("Profile updated successfully!");
-            window.location.href = publicUrl;
+            window.location.href = "/";
         } catch (error) {
             console.error("Error updating profile: ", error);
             toast.error("Failed to update profile.");
@@ -64,10 +64,10 @@ const Profile = () => {
     };
 
     return (
-        <Container maxWidth="sm" className="profile-container">
+        <div className="profile-container">
             <div className="back-home-btn">
                 <Button variant="outlined" onClick={() => navigate("/")}>
-                    <ArrowBackIcon />
+                    <ArrowBackIosIcon />
                 </Button>
             </div>
             <Typography variant="h6" className="profile-title">
@@ -104,7 +104,7 @@ const Profile = () => {
             >
                 Save Changes
             </Button>
-        </Container>
+        </div>
     );
 };
 

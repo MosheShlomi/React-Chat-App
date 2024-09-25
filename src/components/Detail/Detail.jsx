@@ -8,14 +8,19 @@ import { toast } from "react-toastify";
 import { Accordion, AccordionSummary, AccordionDetails, Typography, Button } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ConfirmationDialog from "../Dialogs/ConfirmationDialog";
+import useScreenStore from "../../lib/screenStore";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { useNavigate } from "react-router-dom";
 
 const Detail = () => {
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock, resetChat } = useChatStore();
     const { currentUser } = useUserStore();
+    const { isMobile, activeSection, setActiveSection } = useScreenStore();
     const [sharedPhotos, setSharedPhotos] = useState([]);
     const [sharedFiles, setSharedFiles] = useState([]);
     const [expanded, setExpanded] = useState(false); // State to track which accordion is expanded
     const publicUrl = import.meta.env.VITE_PUBLIC_URL;
+    const navigate = useNavigate();
 
     const handleAccordionChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -138,9 +143,21 @@ const Detail = () => {
         }
     };
 
+    const handleBackButton = () => {
+        setActiveSection("chat");
+        navigate("/");
+    };
+
     return (
         <div className="detail">
             <div className="user">
+                {isMobile && (
+                    <div className="back-home-btn">
+                        <Button variant="outlined" onClick={handleBackButton}>
+                            <ArrowBackIosIcon />
+                        </Button>
+                    </div>
+                )}
                 <img
                     src={
                         user.avatar && !isCurrentUserBlocked && !isReceiverBlocked

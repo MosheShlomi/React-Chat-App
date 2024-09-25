@@ -14,12 +14,18 @@ import ProtectedRoute from "./ProtectedRoute";
 import CircularProgress from "@mui/material/CircularProgress";
 import Profile from "./components/Profile/Profile";
 import { BrowserRouter } from "react-router-dom";
+import useScreenSize from "./hooks/useScreenSize";
+import useScreenStore from "./lib/screenStore";
 
 const App = () => {
     const { currentUser, isLoading, fetchUserInfo } = useUserStore();
     const { chatId } = useChatStore();
     const [showDetails, setShowDetails] = useState(false);
+    const { isMobile, activeSection, setActiveSection } = useScreenStore();
+
     const basename = import.meta.env.MODE === "production" ? "/React-Chat-App" : "/";
+
+    useScreenSize();
 
     useEffect(() => {
         const unSub = onAuthStateChanged(auth, user => {
@@ -48,6 +54,16 @@ const App = () => {
         );
     }
 
+    const openDetailsSection = () => {
+        if (showDetails) {
+            setShowDetails(false);
+            setActiveSection("chat");
+        } else {
+            setShowDetails(true);
+            setActiveSection("detail");
+        }
+    };
+
     return (
         <BrowserRouter basename={basename}>
             <Routes>
@@ -60,9 +76,21 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <div className="container">
-                                <List />
-                                {chatId && <Chat handleOpenDetails={() => setShowDetails(prev => !prev)} />}
-                                {chatId && showDetails && <Detail />}
+                                {isMobile ? (
+                                    <div className="mobile-navigation">
+                                        {activeSection === "list" && <List />}
+                                        {activeSection === "chat" && chatId && (
+                                            <Chat handleOpenDetails={openDetailsSection} key={123} />
+                                        )}
+                                        {activeSection === "detail" && chatId && showDetails && <Detail />}
+                                    </div>
+                                ) : (
+                                    <>
+                                        <List />
+                                        {chatId && <Chat handleOpenDetails={openDetailsSection} key={324} />}
+                                        {chatId && showDetails && <Detail />}
+                                    </>
+                                )}
                             </div>
                         </ProtectedRoute>
                     }
