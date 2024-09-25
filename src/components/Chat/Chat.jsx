@@ -32,7 +32,7 @@ const Chat = props => {
     const [chat, setChat] = useState(null);
     const [fileData, setFileData] = useState(null);
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
-    const { isMobile, activeSection, setActiveSection } = useScreenStore();
+    const { isMobile, setActiveSection } = useScreenStore();
     const { currentUser } = useUserStore();
     const endRef = useRef(null);
     const inputRef = useRef(null);

@@ -15,8 +15,8 @@ const ChatList = () => {
     const [chatsLoaded, setChatsLoaded] = useState(false);
 
     const { currentUser } = useUserStore();
-    const { chatId, changeChat } = useChatStore();
-    const { isMobile, activeSection, setActiveSection } = useScreenStore();
+    const { changeChat } = useChatStore();
+    const { setActiveSection } = useScreenStore();
     const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
     useEffect(() => {

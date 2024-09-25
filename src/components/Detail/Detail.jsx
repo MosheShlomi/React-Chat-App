@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const Detail = () => {
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock, resetChat } = useChatStore();
     const { currentUser } = useUserStore();
-    const { isMobile, activeSection, setActiveSection } = useScreenStore();
+    const { isMobile, setActiveSection } = useScreenStore();
     const [sharedPhotos, setSharedPhotos] = useState([]);
     const [sharedFiles, setSharedFiles] = useState([]);
     const [expanded, setExpanded] = useState(false); // State to track which accordion is expanded

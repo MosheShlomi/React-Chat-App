@@ -8,12 +8,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/userStore";
 import { useChatStore } from "./lib/chatStore";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import SignUp from "./components/SignUp/SignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import CircularProgress from "@mui/material/CircularProgress";
 import Profile from "./components/Profile/Profile";
-import { BrowserRouter } from "react-router-dom";
 import useScreenSize from "./hooks/useScreenSize";
 import useScreenStore from "./lib/screenStore";
 
@@ -80,14 +79,14 @@ const App = () => {
                                     <div className="mobile-navigation">
                                         {activeSection === "list" && <List />}
                                         {activeSection === "chat" && chatId && (
-                                            <Chat handleOpenDetails={openDetailsSection} key={123} />
+                                            <Chat handleOpenDetails={openDetailsSection} />
                                         )}
                                         {activeSection === "detail" && chatId && showDetails && <Detail />}
                                     </div>
                                 ) : (
                                     <>
                                         <List />
-                                        {chatId && <Chat handleOpenDetails={openDetailsSection} key={324} />}
+                                        {chatId && <Chat handleOpenDetails={openDetailsSection} />}
                                         {chatId && showDetails && <Detail />}
                                     </>
                                 )}
