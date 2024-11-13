@@ -7,6 +7,7 @@ import { db } from "../../../lib/firebase";
 import { useChatStore } from "../../../lib/chatStore";
 import Dialog from "@mui/material/Dialog";
 import useScreenStore from "../../../lib/screenStore";
+import Tooltip from "@mui/material/Tooltip";
 
 const ChatList = () => {
     const [addMode, setAddMode] = useState(false);
@@ -76,7 +77,14 @@ const ChatList = () => {
                     <img src={`${publicUrl}/search.png`} alt="" />
                     <input type="text" placeholder="Search username..." onChange={e => setInput(e.target.value)} />
                 </div>
-                <img src={`${publicUrl}/edit.png`} className="add" onClick={() => setAddMode(prev => !prev)} alt="" />
+                <Tooltip title="Add New Chat" arrow>
+                    <img
+                        src={`${publicUrl}/edit.png`}
+                        className="add"
+                        onClick={() => setAddMode(prev => !prev)}
+                        alt=""
+                    />
+                </Tooltip>
             </div>
             {filteredChats.map(chat => (
                 <div className="item" key={chat.chatId} onClick={() => handleSelect(chat)}>
