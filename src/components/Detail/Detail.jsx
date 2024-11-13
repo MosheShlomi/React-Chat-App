@@ -134,6 +134,7 @@ const Detail = () => {
 
                 toast.success("Chat deleted successfully!");
                 resetChat();
+                setActiveSection("list");
             } else {
                 toast.error("No chats found for this user.");
             }

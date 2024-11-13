@@ -50,7 +50,11 @@ const Chat = props => {
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, "chats", chatId), res => {
-            setChat(res.data());
+            if (!res.exists()) {
+                setActiveSection("list");
+            } else {
+                setChat(res.data());
+            }
         });
 
         return () => {
