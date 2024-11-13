@@ -13,6 +13,7 @@ import Audio from "./Audio/Audio";
 import FileAttach from "./FileAttach/FileAttach";
 import { toast } from "react-toastify";
 import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 import useScreenStore from "../../lib/screenStore";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { Button } from "@mui/material";
@@ -219,7 +220,6 @@ const Chat = props => {
 
                 {chat?.messages.length === 0 && <div className="no-messages-info">Enter your first message!</div>}
             </div>
-
             <div className="bottom" disabled={messageSending || isCurrentUserBlocked || isReceiverBlocked}>
                 <div className="icons">
                     <FileAttach handleFile={handleFile} />
@@ -266,9 +266,25 @@ const Chat = props => {
                 onClose={closeImgDialog}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                maxWidth="xl"
+                maxWidth="md"
             >
-                <img src={dialogImg} alt="" />
+                <DialogContent
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <img
+                        src={dialogImg}
+                        alt=""
+                        style={{
+                            maxHeight: "80vh",
+                            width: "100%",
+                            objectFit: "contain",
+                        }}
+                    />
+                </DialogContent>
             </Dialog>
         </div>
     );
