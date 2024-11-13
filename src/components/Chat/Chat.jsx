@@ -32,7 +32,7 @@ const Chat = props => {
     const [text, setText] = useState("");
     const [chat, setChat] = useState(null);
     const [fileData, setFileData] = useState(null);
-    const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
+    const { chatId, resetChat, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
     const { isMobile, setActiveSection } = useScreenStore();
     const { currentUser } = useUserStore();
     const endRef = useRef(null);
@@ -52,6 +52,7 @@ const Chat = props => {
         const unSub = onSnapshot(doc(db, "chats", chatId), res => {
             if (!res.exists()) {
                 setActiveSection("list");
+                resetChat();
             } else {
                 setChat(res.data());
             }
