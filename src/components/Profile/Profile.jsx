@@ -53,6 +53,7 @@ const Profile = () => {
                 email,
                 avatar: avatarUrl,
                 blocked: currentUser.blocked,
+                blockedByOthers: currentUser.blockedByOthers,
             });
 
             toast.success("Profile updated successfully!");

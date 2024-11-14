@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { create } from "zustand";
 import { db } from "./firebase";
 
@@ -7,20 +7,24 @@ export const useUserStore = create((set, get) => ({
     isLoading: true,
     isLoggedOut: false,
 
-    fetchUserInfo: async uid => {
+    fetchUserInfo: uid => {
         if (!uid) {
             return set({ currentUser: null, isLoading: false, isLoggedOut: true });
         }
 
         try {
             const docRef = doc(db, "users", uid);
-            const docSnap = await getDoc(docRef);
 
-            if (docSnap.exists()) {
-                set({ currentUser: docSnap.data(), isLoading: false, isLoggedOut: false });
-            } else {
-                set({ currentUser: null, isLoading: false, isLoggedOut: true });
-            }
+            const unsubscribe = onSnapshot(docRef, docSnap => {
+                if (docSnap.exists()) {
+                    set({ currentUser: docSnap.data(), isLoading: false, isLoggedOut: false });
+                } else {
+                    set({ currentUser: null, isLoading: false, isLoggedOut: true });
+                }
+            });
+
+            // Return the unsubscribe function to stop listening when needed
+            return unsubscribe;
         } catch (err) {
             console.log(err);
             return set({ currentUser: null, isLoading: false, isLoggedOut: true });

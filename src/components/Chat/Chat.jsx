@@ -32,7 +32,7 @@ const Chat = props => {
     const [text, setText] = useState("");
     const [chat, setChat] = useState(null);
     const [fileData, setFileData] = useState(null);
-    const { chatId, resetChat, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
+    const { chatId, resetChat, user, isCurrentUserBlocked, isReceiverBlocked, changeChat } = useChatStore();
     const { isMobile, setActiveSection } = useScreenStore();
     const { currentUser } = useUserStore();
     const endRef = useRef(null);
@@ -62,6 +62,10 @@ const Chat = props => {
             unSub();
         };
     }, [chatId]);
+
+    useEffect(() => {
+        changeChat(chatId, user);
+    }, [currentUser.blockedByOthers]);
 
     useEffect(() => {
         if (fileData) {
