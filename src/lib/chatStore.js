@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { useUserStore } from "./userStore";
+import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { db } from "./firebase";
 
 export const useChatStore = create(set => {
     const handleLogout = () => {
@@ -27,7 +29,7 @@ export const useChatStore = create(set => {
             const currentUser = useUserStore.getState().currentUser;
 
             //! Check if current user is blocked
-            if (user.blocked.includes(currentUser.id)) {
+            if (currentUser.blockedByOthers && currentUser.blockedByOthers.includes(user.id)) {
                 return set({
                     chatId,
                     user,
@@ -54,8 +56,12 @@ export const useChatStore = create(set => {
             }
         },
 
-        changeBlock: () => {
+        changeReceiverBlock: () => {
             set(state => ({ ...state, isReceiverBlocked: !state.isReceiverBlocked }));
+        },
+
+        changeCurrentUserBlock: () => {
+            set(state => ({ ...state, isCurrentUserBlocked: !state.isCurrentUserBlocked }));
         },
 
         resetChat: () => {

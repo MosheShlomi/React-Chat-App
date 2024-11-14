@@ -13,7 +13,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useNavigate } from "react-router-dom";
 
 const Detail = () => {
-    const { chatId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock, resetChat } = useChatStore();
+    const { chatId, user, isCurrentUserBlocked, isReceiverBlocked, changeReceiverBlock, resetChat } = useChatStore();
     const { currentUser } = useUserStore();
     const { isMobile, setActiveSection } = useScreenStore();
     const [sharedPhotos, setSharedPhotos] = useState([]);
@@ -63,21 +63,30 @@ const Detail = () => {
         }
 
         const userDocRef = doc(db, "users", currentUser.id);
+        const receiverDocRef = doc(db, "users", user.id);
 
         try {
             if (isReceiverBlocked) {
+                // Unblock the user in both documents
                 await updateDoc(userDocRef, {
                     blocked: arrayRemove(user.id),
                 });
+                await updateDoc(receiverDocRef, {
+                    blockedByOthers: arrayRemove(currentUser.id),
+                });
                 toast.success(`${user.username} Unblocked!`);
             } else {
+                // Block the user in both documents
                 await updateDoc(userDocRef, {
                     blocked: arrayUnion(user.id),
+                });
+                await updateDoc(receiverDocRef, {
+                    blockedByOthers: arrayUnion(currentUser.id),
                 });
                 toast.success(`${user.username} Blocked!`);
             }
 
-            changeBlock();
+            changeReceiverBlock();
         } catch (err) {
             console.log(err);
         }

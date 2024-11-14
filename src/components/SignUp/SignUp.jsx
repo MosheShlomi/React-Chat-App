@@ -51,6 +51,7 @@ const SignUp = () => {
                 email,
                 id: res.user.uid,
                 blocked: [],
+                blockedByOthers: [],
                 ...(avatar.file && { avatar: imgUrl }),
             });
 
